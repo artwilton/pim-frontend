@@ -30,7 +30,9 @@ class App extends Component {
 
   state = {
     currentUserId: null,
-    currentUserName: ''
+    currentUserName: '',
+    // Temp Routing
+    currentPage: 'Login'
   }
 
   loginAuthHandler = (email) => {
@@ -84,6 +86,7 @@ class App extends Component {
       return (
         <SafeAreaView>
           <>
+            {/* Temporary Routing */}
             <LoginSignupScreen loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
           </>
         </SafeAreaView>
