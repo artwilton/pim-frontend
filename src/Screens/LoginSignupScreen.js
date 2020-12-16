@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {
   Text,
-  StyleSheet,
   TextInput,
   View,
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
+import { styles } from  '../Styles'
 
 class LoginSignupScreen extends Component {
   state = {
@@ -17,12 +17,10 @@ class LoginSignupScreen extends Component {
   };
 
   localAuthHandler = () => {
-    // event.preventDefault();
     this.props.loginAuthHandler(this.state.email);
   };
 
   localSignupHandler = () => {
-    // event.preventDefault();
     this.props.signupHandler(this.state);
   };
 
@@ -35,11 +33,11 @@ class LoginSignupScreen extends Component {
       <View>
         <Text>Login/Signup Page</Text>
 
-        <TouchableOpacity style={styles.button}>
-          <Text onPress={() => this.setState({signup: false})} >Login</Text>
+        <TouchableOpacity style={styles.button} onPress={() => this.setState({signup: false})}>
+          <Text>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text onPress={() => this.setState({signup: true})}>Signup</Text>
+        <TouchableOpacity style={styles.button} onPress={() => this.setState({signup: true})}>
+          <Text>Signup</Text>
         </TouchableOpacity>
 
         {this.state.signup ?
@@ -68,50 +66,20 @@ class LoginSignupScreen extends Component {
             // onEndEditing={Keyboard.dismiss}
         />
 
-         <TouchableOpacity style={styles.button}>
-            {this.state.signup ?
-                <Text onPress={this.localSignupHandler}>Signup</Text>
-                :
-                <Text onPress={this.localAuthHandler}>Login</Text>
-             }
-        </TouchableOpacity>
-        
+        {this.state.signup ?
+          <TouchableOpacity onPress={this.localSignupHandler} style={styles.button}>
+            <Text>Signup</Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity onPress={this.localAuthHandler} style={styles.button}>
+            <Text>Login</Text>
+          </TouchableOpacity>
+
+        }
         
       </View>
-
-      //   <div id="login">
-      //       <h1>Login</h1>
-      //     <form onSubmit={this.localLoginHandler}>
-      //       <label>Email</label><br/>
-      //       <input
-      //         type="text"
-      //         value={this.state.email}
-      //         name="email"
-      //         onChange={this.loginSignupFormHandler}
-      //       ></input><br/><br/>
-      //       <label>Password</label><br/>
-      //       <input type="password"></input><br/><br/>
-      //       <input type="submit" value="Login" id="l-btn"/>
-      //     </form>
-      //     { this.props.currentUserId === null ? null : <p>You were logged in successfully!</p>}
-      //   </div>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    width: '80%',
-  },
-});
 
 export default LoginSignupScreen;

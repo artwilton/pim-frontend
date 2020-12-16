@@ -8,8 +8,8 @@
 
 import React, { Component } from "react";
 import {
+  Alert,
   SafeAreaView,
-  StyleSheet,
   ScrollView,
   View,
   Text,
@@ -25,122 +25,113 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { AddScreen, ContainedItemsScreen, EditScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
+import { styles } from './src/Styles'
 
 class App extends Component {
 
   state = {
-    currentUserId: null,
+    currentUserId: '',
     currentUserName: '',
     // Temp Routing
-    currentPage: 'Login'
+    currentPage: 'Login',
+    items: [],
+    containers: [],
+    categories: [],
+    filteredItems: [],
+    filteredContainers: []
   }
 
+  // Temp Auth Functions
+
   loginAuthHandler = (email) => {
-    console.log(email)
-    // fetch(`http://localhost:3000/api/v1/users/`)
-    //   .then((r) => r.json())
-    //   .then((data) => {
-    //     data.forEach((user) => {
-    //       if (email === user.email) {
-    //         this.setCurrentUser(user)
-    //         this.props.history.push(`/home`)
-    //       }
-    //     });
-    //   });
+    fetch(`http://10.0.2.2:3000/api/v1/users/`)
+      .then((r) => r.json())
+      .then((data) => {
+        data.forEach((user) => {
+          if (email === user.email) {
+            this.setCurrentUser(user)
+            this.setState({currentPage: 'Home'})
+          }
+        });
+      });
   };
 
   signupHandler = (userObj) => {
-    console.log(userObj)
-    // const { name, email, password } = userObj;
-    // fetch("http://localhost:3000/api/v1/users", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accepts: "application/json",
-    //   },
-    //   body: JSON.stringify({ name, email, password }),
-    // })
-    //   .then((resp) => resp.json())
-    //   .then((data) => {
-    //     this.setCurrentUser(data)
-    //     this.props.history.push(`/home`)
-    //   });
+    const { name, email, password } = userObj;
+    fetch("http://10.0.2.2:3000/api/v1/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accepts: "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        this.setCurrentUser(data)
+      });
+      this.setState({currentPage: 'Home'})
   };
 
   setCurrentUser = user => {
-    this.setState({ currentUserId: user.id }, this.fetchUserItems);
+    this.setState({ currentUserId: user.id }, this.fetchUser);
     this.setState({ currentUserName: user.name });
   }
 
-  async fetchUserItems() {
+  // Fetch
 
-    let itemResponse = await fetch(
-      `http://localhost:3000/api/v1/users/${this.state.currentUserId}/items`
+  async fetchUser() {
+
+    let userResponse = await fetch(
+      `http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items`
     );
-    let items = await itemResponse.json();
-    this.setState({ userItems: items });
+    let userData = await userResponse.json();
+    let { items, containers, categories} = userData
+    this.setState({ items, containers, categories }, ()=> console.log(this.state));
 
+  }
+
+  // Routing
+
+  buttonRouteHandler = link => {
+    this.setState({currentPage: link})
+  }
+
+  tempRouting = () => {
+
+    let route = ''
+
+    switch(this.state.currentPage) {
+      case 'Login':
+        route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
+        break;
+      case 'Home':
+        route = <HomeScreen buttonRouteHandler={this.buttonRouteHandler} style={styles} currentUserName={this.state.currentUserName}></HomeScreen>
+        break;
+      case 'Scan':
+        route = <ScanScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></ScanScreen>
+        break;
+      case 'Add':
+        route = <AddScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></AddScreen>
+        break;
+      case 'AllItems':
+        route = <IndexScreen items={this.state.items} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
+        break;
+      default:
+        route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
+    }
+
+    return route
   }
 
   render () {
       return (
         <SafeAreaView>
-          <>
-            {/* Temporary Routing */}
-            <LoginSignupScreen loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
-          </>
+            {this.tempRouting()}
         </SafeAreaView>
           
       )
   }
 }
-
-// const App: () => React$Node = () => {
-//   return (
-//     <>
-//       <StatusBar barStyle="dark-content" />
-//       <SafeAreaView>
-//         <ScrollView
-//           contentInsetAdjustmentBehavior="automatic"
-//           style={styles.scrollView}>
-//           <Header />
-//           {global.HermesInternal == null ? null : (
-//             <View style={styles.engine}>
-//               <Text style={styles.footer}>Engine: Hermes</Text>
-//             </View>
-//           )}
-//           <View style={styles.body}>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Step One</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Edit <Text style={styles.highlight}>App.js</Text> to change this
-//                 screen and then come back to see your edits.
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>See Your Changes</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <ReloadInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Debug</Text>
-//               <Text style={styles.sectionDescription}>
-//                 <DebugInstructions />
-//               </Text>
-//             </View>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Learn More</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Read the docs to discover what to do next:
-//               </Text>
-//             </View>
-//             <LearnMoreLinks />
-//           </View>
-//         </ScrollView>
-//       </SafeAreaView>
-//     </>
-//   );
-// };
 
 export default App;
