@@ -21,8 +21,8 @@ class HomeScreen extends Component {
                 <View>
                     <LargeCard title={'All Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllItems'}></LargeCard>
                     <LargeCard title={'Shared Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'shared'}></LargeCard>
-                    <LargeCard title={'Containers'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'containers'}></LargeCard>
-                    <LargeCard title={'Categories'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'categories'}></LargeCard>
+                    <LargeCard title={'Containers'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllContainers'}></LargeCard>
+                    <LargeCard title={'Categories'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllCategories'}></LargeCard>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>

@@ -38,7 +38,7 @@ class App extends Component {
     containers: [],
     categories: [],
     filteredItems: [],
-    filteredContainers: []
+    searchValue: []
   }
 
   // Temp Auth Functions
@@ -87,9 +87,34 @@ class App extends Component {
     );
     let userData = await userResponse.json();
     let { items, containers, categories} = userData
-    this.setState({ items, containers, categories }, ()=> console.log(this.state));
+    this.setState({ items, containers, categories, filteredItems: items }, ()=> console.log(this.state));
 
   }
+
+  addItem = (item) => {
+    let { name, description, notes, barcode, container_id, category_id } = item
+    fetch(`http://localhost:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accepts: "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        description,
+        notes,
+        barcode,
+        container_id,
+        category_id
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        this.setState({ items: [...this.state.items, item] }, () =>
+          console.log(this.state.items)
+        );
+      });
+  };
 
   // Routing
 
@@ -115,13 +140,34 @@ class App extends Component {
         route = <AddScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></AddScreen>
         break;
       case 'AllItems':
-        route = <IndexScreen items={this.state.items} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
+        route = <IndexScreen
+        searchValue={this.state.searchValue}
+        searchHandler={this.searchHandler}
+        items={this.filteredItems()}
+        buttonRouteHandler={this.buttonRouteHandler}
+        style={styles}></IndexScreen>
+        break;
+      case 'AllContainers':
+        route = <IndexScreen containers={this.state.containers} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
+        break;
+      case 'AllCategories':
+        route = <IndexScreen categories={this.state.categories} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
         break;
       default:
         route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
     }
 
     return route
+  }
+
+  // Search
+
+  searchHandler = searchText => {
+    this.setState({searchValue: searchText})
+  }
+
+  filteredItems = () => {
+    return this.state.items.filter(item => item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
   }
 
   render () {
