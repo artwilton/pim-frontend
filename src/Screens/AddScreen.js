@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import NewItemForm from '../Components/Forms/NewForms/NewItemForm'
+
 import Footer from '../Components/Footer/Footer'
 
 class AddScreen extends Component {
@@ -18,7 +20,7 @@ class AddScreen extends Component {
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <Text>BODY</Text>
+                    <NewItemForm addItem={this.props.addItem} containers={this.props.containers} categories={this.props.categories} ></NewItemForm>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>

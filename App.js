@@ -92,8 +92,9 @@ class App extends Component {
   }
 
   addItem = (item) => {
-    let { name, description, notes, barcode, container_id, category_id } = item
-    fetch(`http://localhost:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
+    console.log('add item:', item)
+    let { name, description, notes, barcode, selected_container, selected_category } = item
+    fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -104,14 +105,14 @@ class App extends Component {
         description,
         notes,
         barcode,
-        container_id,
-        category_id
+        container_id: selected_container.id,
+        category_id: selected_category.id
       }),
     })
       .then((resp) => resp.json())
       .then((data) => {
         this.setState({ items: [...this.state.items, item] }, () =>
-          console.log(this.state.items)
+          console.log(data)
         );
       });
   };
@@ -137,7 +138,7 @@ class App extends Component {
         route = <ScanScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></ScanScreen>
         break;
       case 'Add':
-        route = <AddScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></AddScreen>
+        route = <AddScreen addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} buttonRouteHandler={this.buttonRouteHandler} style={styles}></AddScreen>
         break;
       case 'AllItems':
         route = <IndexScreen
