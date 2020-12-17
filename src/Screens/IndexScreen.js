@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import Footer from '../Components/Footer/Footer'
+import Search from'../Components/Search'
 
 class IndexScreen extends Component {
 
@@ -26,13 +27,14 @@ class IndexScreen extends Component {
 
 
         return this.inputTypeCheck().map((obj) => (
-            <Text key={obj.id}>{this.props.inputType}: {obj.name}</Text>
+            <Text key={obj.id} onPress={() => this.props.buttonRouteHandler(`${this.props.inputType}Show`, obj)}>{this.props.inputType}: {obj.name}</Text>
         ));
       };
 
     render () {
         return (
             <ScrollView>
+                    {this.props.items ? <Search searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
                     {this.renderCards()}
                     <View>
                     <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
