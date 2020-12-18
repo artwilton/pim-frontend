@@ -39,7 +39,8 @@ class App extends Component {
     containers: [],
     categories: [],
     filteredItems: [],
-    searchValue: []
+    searchValue: '',
+    searchType: 'Name'
   }
 
   // Temp Auth Functions
@@ -93,7 +94,7 @@ class App extends Component {
   }
 
   addItem = (item) => {
-    let { name, description, notes, barcode, selected_container, selected_category } = item
+    let { name, description, notes, barcode, container, category } = item
     fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
       method: "POST",
       headers: {
@@ -105,21 +106,21 @@ class App extends Component {
         description,
         notes,
         barcode,
-        container_id: selected_container.id,
-        category_id: selected_category.id
+        container_id: container.id,
+        category_id: category.id
       }),
     })
       .then((resp) => resp.json())
       .then((data) => {
-        this.setState({ items: [...this.state.items, item] },
-        this.setState({ filteredItems: items })
+        this.setState({ items: [...this.state.items, data] },
+        ()=> this.setState({ filteredItems: this.state.items })
         );
       });
   };
 
   editItem = (item) => {
     let { name, description, notes, barcode, selected_container, selected_category } = item
-    fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}`, {
+    fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -136,10 +137,10 @@ class App extends Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data)
-        // this.setState({ items: [...this.state.items, item] },
-        // this.setState({ filteredItems: items })
-        // );
+        this.setState({ items: data.items },
+        ()=> this.setState({ filteredItems: data },
+        ()=> this.setState({currentPage: 'AllItems'})  )
+        );
       });
   };
 
@@ -147,10 +148,12 @@ class App extends Component {
     fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_items/${item.id}`, {
       method: "DELETE",
     })
+
       .then((resp) => resp.json())
       .then((data) => {
-        this.setState({ items: data },
-        this.setState({ filteredItems: items })
+        this.setState({ items: data.items },
+        ()=> this.setState({ filteredItems: this.state.items }, 
+        ()=> this.setState({currentPage: 'AllItems'}))
         );
       });
   }
@@ -180,6 +183,7 @@ class App extends Component {
         break;
       case 'AllItems':
         route = <IndexScreen
+        setSearchType={this.setSearchType}
         inputType={'Item'}
         searchValue={this.state.searchValue}
         searchHandler={this.searchHandler}
@@ -225,7 +229,16 @@ class App extends Component {
   }
 
   filteredItems = () => {
-    return this.state.items.filter(item => item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+    return (
+      this.state.searchType === 'Name' ?
+      this.state.items.filter(item => item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+      :
+      this.state.items.filter(item => item.category.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+    )
+  }
+
+  setSearchType = searchType => {
+    this.setState({searchType: searchType}, () => console.log(this.state.searchType))
   }
 
   render () {

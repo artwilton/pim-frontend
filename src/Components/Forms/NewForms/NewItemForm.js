@@ -10,12 +10,12 @@ class NewItemForm extends Component {
     description: '',
     notes: '',
     barcode: '',
-    selected_container: {},
-    selected_category: {}
+    container: {},
+    category: {}
   };
 
   componentDidMount() {
-    this.setState({selected_container: this.props.containers[0], selected_category: this.props.categories[0]})
+    this.setState({container: this.props.containers[0], category: this.props.categories[0]})
   }
 
   newItemFormHandler = (text, name) => {
@@ -60,19 +60,19 @@ class NewItemForm extends Component {
         />
         <Text> Select Container: </Text>
         <Picker
-          selectedValue={this.state.selected_container}
+          selectedValue={this.state.container}
           style={{height: 50, width: 300}}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({selected_container: itemValue}, ()=> console.log('containers', this.state.selected_container))
+            this.setState({container: itemValue}, ()=> console.log('containers', this.state.container))
           }>
           {this.renderContainerValues()}
         </Picker>
         <Text> Select Category: </Text>
         <Picker
-          selectedValue={this.state.selected_category}
+          selectedValue={this.state.category}
           style={{height: 50, width: 300}}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({selected_category: itemValue})
+            this.setState({category: itemValue})
           }>
           {this.renderCategoryValues()}
         </Picker>

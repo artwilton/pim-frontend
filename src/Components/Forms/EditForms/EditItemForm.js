@@ -17,8 +17,8 @@ class EditItemForm extends Component {
 
   componentDidMount() {
     console.log('clicked obj', this.props.clickedObj)
-    let { name, description, notes, barcode, container, category } = this.props.clickedObj
-    this.setState({name, description, notes, barcode, selected_container: container, selected_category: category}, ()=> console.log('mounted state', this.state))
+    let { id, name, description, notes, barcode, container, category } = this.props.clickedObj
+    this.setState({id, name, description, notes, barcode, selected_container: container, selected_category: category}, ()=> console.log('mounted state', this.state))
   }
 
   editItemFormHandler = (text, name) => {

@@ -34,7 +34,8 @@ class IndexScreen extends Component {
     render () {
         return (
             <ScrollView>
-                    {this.props.items ? <Search searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
+                    {this.props.items ? <Search setSearchType={this.props.setSearchType} searchType={'Name'} searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
+                    {this.props.items ? <Search setSearchType={this.props.setSearchType} searchType={'Category'} searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
                     {this.renderCards()}
                     <View>
                     <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>

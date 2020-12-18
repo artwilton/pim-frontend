@@ -6,8 +6,9 @@ function Search(props) {
     return (
         <View>
             <TextInput
+            onFocus={() => props.setSearchType(props.searchType)}
             onChangeText={(text) => props.searchHandler(text)}
-            placeholder={'Search Items'}
+            placeholder={`Search ${props.searchType}`}
             value={props.searchValue}
             />
         </View>
