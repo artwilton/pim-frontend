@@ -6,6 +6,7 @@ import Footer from '../Components/Footer/Footer';
 
 class ShowScreen extends Component {
   render() {
+    console.log('clicke object', this.props.clickedObj)
     return (
       <ScrollView>
         <View>
