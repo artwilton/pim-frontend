@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  Image,
 } from 'react-native';
 
 import {
@@ -39,6 +40,7 @@ class App extends Component {
     containers: [],
     categories: [],
     filteredItems: [],
+    user_profile_photo: '',
     searchValue: '',
     searchType: 'Name'
   }
@@ -88,8 +90,8 @@ class App extends Component {
       `http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items`
     );
     let userData = await userResponse.json();
-    let { items, containers, categories} = userData
-    this.setState({ items, containers, categories, filteredItems: items });
+    let { items, containers, categories, user_profile_photo} = userData
+    this.setState({ items, containers, categories, filteredItems: items, user_profile_photo });
 
   }
 
