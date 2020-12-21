@@ -37,6 +37,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+		<string>Allow access to take a photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to choose a photo</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
