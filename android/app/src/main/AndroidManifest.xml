@@ -2,6 +2,7 @@
   package="com.pim">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-sdk tools:overrideLibrary="com.imagepicker"/>
 
     <application
       android:name=".MainApplication"
