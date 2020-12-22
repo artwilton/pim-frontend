@@ -10,10 +10,10 @@ class ShowScreen extends Component {
     return (
       <ScrollView>
         <View>
-            {this.props.clickedObj.photos ?
+            {this.props.clickedObj.photo ?
               <Image
                 style={this.props.style.fullSizePhoto}
-                source={{uri: `http://10.0.2.2:3000${this.props.clickedObj.photos[0]}`}}
+                source={{uri: `http://10.0.2.2:3000${this.props.clickedObj.photo}`}}
               />
             :
               null

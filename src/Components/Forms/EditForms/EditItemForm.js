@@ -21,6 +21,9 @@ class EditItemForm extends Component {
     barcode: '',
     selected_container: {},
     selected_category: {},
+    photo: '',
+    newPhoto: {}
+
   };
 
   componentDidMount() {
@@ -33,6 +36,7 @@ class EditItemForm extends Component {
       barcode,
       container,
       category,
+      photo
     } = this.props.clickedObj;
     this.setState(
       {
@@ -43,11 +47,29 @@ class EditItemForm extends Component {
         barcode,
         selected_container: container,
         selected_category: category,
+        photo
       },
       () => console.log('mounted state', this.state),
     );
   }
 
+  cameraTakePhoto = () => {
+    return(
+      launchCamera(
+        {
+          mediaType: 'photo',
+          includeBase64: false,
+          maxHeight: 200,
+          maxWidth: 200,
+        },
+        (response) => {
+          this.setState({newPhoto: response},
+          () => this.props.editItemPhoto(this.state)
+          )
+        },
+      )
+    )
+ }
   editItemFormHandler = (text, name) => {
     this.setState({[name]: text});
   };
@@ -68,11 +90,16 @@ class EditItemForm extends Component {
     return (
       <View>
         <Image
-          style={this.props.style.fullSizePhoto}
+          style={styles.fullSizePhoto}
           source={{
-            uri: `http://10.0.2.2:3000${this.props.clickedObj.photos[0]}`,
+            uri: `http://10.0.2.2:3000${this.state.photo}`,
           }}
         />
+        <TouchableOpacity
+          onPress={() => this.cameraTakePhoto()}
+          style={styles.button}>
+          <Text>Update Photo</Text>
+        </TouchableOpacity>
         <TextInput
           onChangeText={(text) => this.editItemFormHandler(text, 'name')}
           placeholder={'Item Name'}
@@ -114,7 +141,7 @@ class EditItemForm extends Component {
           {this.renderCategoryValues()}
         </Picker>
         <TouchableOpacity
-          onPress={() => this.props.editItem(this.state)}
+          onPress={() => this.props.editItemPhoto(this.state)}
           style={styles.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>

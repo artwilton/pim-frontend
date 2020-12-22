@@ -3,6 +3,7 @@ import {
   Text,
   TextInput,
   View,
+  ScrollView,
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
@@ -14,19 +15,19 @@ class EditScreen extends Component {
     
     render () {
         return (
-            <View>
+            <ScrollView>
                 <Text>
                     Edit {this.props.inputType}
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <EditItemForm editItem={this.props.editItem} clickedObj={this.props.clickedObj} containers={this.props.containers} categories={this.props.categories} ></EditItemForm>
+                    <EditItemForm editItemPhoto={this.props.editItemPhoto} editItem={this.props.editItem} clickedObj={this.props.clickedObj} containers={this.props.containers} categories={this.props.categories} ></EditItemForm>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
                     <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }

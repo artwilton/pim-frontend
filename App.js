@@ -120,6 +120,48 @@ class App extends Component {
       });
   };
 
+  editItemPhoto = (itemObj) => {
+
+    let { name, description, notes, barcode, selected_container, selected_category, newPhoto } = itemObj
+
+    const formData = new FormData();
+    
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('notes', notes);
+    formData.append('barcode', barcode);
+    formData.append('container_id', selected_container.id);
+    formData.append('category_id', selected_category.id);
+
+    formData.append('photo', {
+      name: newPhoto.fileName,
+      type: newPhoto.type,
+      uri: newPhoto.uri,
+        // Platform.OS === 'android' ? newPhoto.uri : newPhoto.uri.replace('file://', ''),
+    });
+
+    // formData.append('photo', photoUri);
+
+    console.log('form data', formData)
+
+    fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => console.log('uploaded photo', data))
+    .catch((error) => {
+      console.log('upload error', error);
+    });
+
+    // .then(user => {
+    //   userInfo.querySelector('form').remove()
+    //   renderUser(user)
+    //   toggle(userInfoText)
+    // })
+   
+  }
+
   editItem = (item) => {
     let { name, description, notes, barcode, selected_container, selected_category } = item
     fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
@@ -203,7 +245,7 @@ class App extends Component {
         route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></ShowScreen>
         break;
       case 'ItemEdit':
-        route = <EditScreen editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
+        route = <EditScreen editItemPhoto={this.editItemPhoto} editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
         break;
       case 'ContainerShow':
         route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></ShowScreen>
