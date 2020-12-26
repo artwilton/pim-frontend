@@ -1,15 +1,23 @@
 import React, {Component} from 'react';
 
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 
 import Footer from '../Components/Footer/Footer';
 
 class ShowScreen extends Component {
   render() {
-    console.log('show page log', this.props.clickedObj)
+    console.log('clicke object', this.props.clickedObj)
     return (
       <ScrollView>
         <View>
+            {this.props.clickedObj.photos ?
+              <Image
+                style={this.props.style.fullSizePhoto}
+                source={{uri: `http://10.0.2.2:3000${this.props.clickedObj.photos[0]}`}}
+              />
+            :
+              null
+            }
           <Text> Name: {this.props.clickedObj.name} </Text>
           <Text> Description: {this.props.clickedObj.description} </Text>
 
