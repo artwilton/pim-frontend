@@ -22,8 +22,7 @@ class EditItemForm extends Component {
     selected_container: {},
     selected_category: {},
     photo: '',
-    newPhoto: {}
-
+    newPhoto: {},
   };
 
   componentDidMount() {
@@ -36,7 +35,7 @@ class EditItemForm extends Component {
       barcode,
       container,
       category,
-      photo
+      photo,
     } = this.props.clickedObj;
     this.setState(
       {
@@ -47,29 +46,40 @@ class EditItemForm extends Component {
         barcode,
         selected_container: container,
         selected_category: category,
-        photo
+        photo,
       },
       () => console.log('mounted state', this.state),
     );
   }
 
   cameraTakePhoto = () => {
-    return(
-      launchCamera(
-        {
-          mediaType: 'photo',
-          includeBase64: false,
-          maxHeight: 200,
-          maxWidth: 200,
-        },
-        (response) => {
-          this.setState({newPhoto: response},
-          () => this.props.editItemPhoto(this.state)
-          )
-        },
-      )
-    )
- }
+    return launchCamera(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 200,
+        maxWidth: 200,
+      },
+      (response) => {
+        this.setState({newPhoto: response});
+      },
+    );
+  };
+
+  uploadPhoto = () => {
+    return launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 200,
+        maxWidth: 200,
+      },
+      (response) => {
+        this.setState({newPhoto: response});
+      },
+    );
+  };
+
   editItemFormHandler = (text, name) => {
     this.setState({[name]: text});
   };
@@ -98,7 +108,12 @@ class EditItemForm extends Component {
         <TouchableOpacity
           onPress={() => this.cameraTakePhoto()}
           style={styles.button}>
-          <Text>Update Photo</Text>
+          <Text>Take New Photo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.uploadPhoto()}
+          style={styles.button}>
+          <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
           onChangeText={(text) => this.editItemFormHandler(text, 'name')}

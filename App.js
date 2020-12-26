@@ -120,45 +120,50 @@ class App extends Component {
       });
   };
 
+  formDataNullCheck = (formData, name, value) => {
+
+    if ((name !== 'photo' && value ) || (name === 'photo' && value.uri)) {
+      formData.append(name, value);
+    } else if (name !== 'photo' && !value ) {
+      formData.append(name, '');
+    }
+  }
+
   editItemPhoto = (itemObj) => {
 
     let { name, description, notes, barcode, selected_container, selected_category, newPhoto } = itemObj
 
     const formData = new FormData();
-    
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('notes', notes);
-    formData.append('barcode', barcode);
-    formData.append('container_id', selected_container.id);
-    formData.append('category_id', selected_category.id);
-
-    formData.append('photo', {
+ 
+    this.formDataNullCheck(formData, 'name', name);
+    this.formDataNullCheck(formData, 'description', description);
+    this.formDataNullCheck(formData, 'notes', notes);
+    this.formDataNullCheck(formData, 'barcode', barcode);
+    this.formDataNullCheck(formData, 'container_id', selected_container.id);
+    this.formDataNullCheck(formData, 'category_id', selected_category.id);
+    this.formDataNullCheck(formData, 'photo', {
       name: newPhoto.fileName,
       type: newPhoto.type,
-      uri: newPhoto.uri,
-        // Platform.OS === 'android' ? newPhoto.uri : newPhoto.uri.replace('file://', ''),
+      uri: Platform.OS === 'android' ? newPhoto.uri : newPhoto.uri.replace('file://', ''),
     });
 
-    // formData.append('photo', photoUri);
-
-    console.log('form data', formData)
+    console.log(formData)
 
     fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
       method: 'PUT',
       body: formData
     })
-    .then(response => response.json())
-    .then(data => console.log('uploaded photo', data))
+
+    .then(response => response.json())  
+    .then((data) => {
+      this.setState({ items: data.items },
+      ()=> this.setState({ filteredItems: data },
+      ()=> this.setState({currentPage: 'AllItems'})  )
+      );
+    })
     .catch((error) => {
       console.log('upload error', error);
     });
-
-    // .then(user => {
-    //   userInfo.querySelector('form').remove()
-    //   renderUser(user)
-    //   toggle(userInfoText)
-    // })
    
   }
 
