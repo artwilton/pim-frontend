@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 /**
  * Sample React Native App
@@ -31,6 +32,8 @@ import {
 
 import { AddScreen, ContainedItemsScreen, EditScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
 import { styles } from './src/Styles'
+
+const Stack = createStackNavigator();
 
 class App extends Component {
 
@@ -213,8 +216,8 @@ class App extends Component {
 
   // Routing
 
-  buttonRouteHandler = (link, obj = {}) => {
-    this.setState({currentPage: link, clickedObj: obj}, ()=> console.log(this.state.clickedObj.name))
+  setClickedObj = (obj = {}) => {
+    this.setState({clickedObj: obj}, ()=> console.log('clickedObj', this.state.clickedObj.name))
   }
 
   tempRouting = () => {
@@ -226,13 +229,13 @@ class App extends Component {
         route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
         break;
       case 'Home':
-        route = <HomeScreen buttonRouteHandler={this.buttonRouteHandler} style={styles} currentUserName={this.state.currentUserName}></HomeScreen>
+        route = <HomeScreen setClickedObj={this.setClickedObj} style={styles} currentUserName={this.state.currentUserName}></HomeScreen>
         break;
       case 'Scan':
-        route = <ScanScreen buttonRouteHandler={this.buttonRouteHandler} style={styles}></ScanScreen>
+        route = <ScanScreen setClickedObj={this.setClickedObj} style={styles}></ScanScreen>
         break;
       case 'Add':
-        route = <AddScreen addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} buttonRouteHandler={this.buttonRouteHandler} style={styles}></AddScreen>
+        route = <AddScreen addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}></AddScreen>
         break;
       case 'AllItems':
         route = <IndexScreen
@@ -241,32 +244,32 @@ class App extends Component {
         searchValue={this.state.searchValue}
         searchHandler={this.searchHandler}
         items={this.filteredItems()}
-        buttonRouteHandler={this.buttonRouteHandler}
+        setClickedObj={this.setClickedObj}
         style={styles}></IndexScreen>
         break;
       case 'AllContainers':
-        route = <IndexScreen inputType={'Container'} containers={this.state.containers} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
+        route = <IndexScreen inputType={'Container'} containers={this.state.containers} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
         break;
       case 'AllCategories':
-        route = <IndexScreen inputType={'Category'}  categories={this.state.categories} buttonRouteHandler={this.buttonRouteHandler} style={styles}></IndexScreen>
+        route = <IndexScreen inputType={'Category'}  categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
         break;
       case 'ItemShow':
-        route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></ShowScreen>
+        route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
         break;
       case 'ItemEdit':
-        route = <EditScreen editItemPhoto={this.editItemPhoto} editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
+        route = <EditScreen editItemPhoto={this.editItemPhoto} editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
         break;
       case 'ContainerShow':
-        route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></ShowScreen>
+        route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
         break;
       case 'ContainerEdit':
-        route = <EditScreen inputType={'Container'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></EditScreen>
+        route = <EditScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></EditScreen>
         break;
       case 'CategoryShow':
-        route = <ShowScreen inputType={'Category'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></ShowScreen>
+        route = <ShowScreen inputType={'Category'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
         break;
       case 'CategoryEdit':
-        route = <EditScreen inputType={'Category'} clickedObj={this.state.clickedObj} buttonRouteHandler={this.buttonRouteHandler} style={styles}></EditScreen>
+        route = <EditScreen inputType={'Category'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></EditScreen>
         break;
       default:
         route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
@@ -297,11 +300,34 @@ class App extends Component {
   render () {
       return (
         <NavigationContainer>
-          <SafeAreaView>
-              {this.tempRouting()}
-          </SafeAreaView>
+          <Stack.Navigator initialRouteName="Home">
+
+            <Stack.Screen name="Login">
+              {props => <LoginSignupScreen {...props} style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>}
+            </Stack.Screen>
+
+            <Stack.Screen name="Home">
+              {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
+            </Stack.Screen>
+
+            <Stack.Screen name="Scan" component={ScanScreen} />
+            <Stack.Screen name="Add" component={AddScreen} />
+            <Stack.Screen name="AllItems" component={IndexScreen} />
+            <Stack.Screen name="AllContainers" component={IndexScreen} />
+            <Stack.Screen name="AllCategories" component={IndexScreen} />
+            <Stack.Screen name="ItemShow" component={ShowScreen} />
+            <Stack.Screen name="ItemEdit" component={EditScreen} />
+            <Stack.Screen name="ContainerShow" component={ShowScreen} />
+            <Stack.Screen name="ContainerEdit" component={EditScreen} />
+            <Stack.Screen name="CategoryShow" component={ShowScreen} />
+            <Stack.Screen name="CategoryEdit" component={EditScreen} />        
+          </Stack.Navigator>
         </NavigationContainer>
           
+          // <SafeAreaView>
+            
+          //     {this.tempRouting()}
+          // </SafeAreaView>
       )
   }
 }

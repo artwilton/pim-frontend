@@ -6,31 +6,37 @@ import {
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Footer from '../Components/Footer/Footer'
 import { LargeCard } from '../Components/Body';
+import { styles } from '../Styles'
 
-class HomeScreen extends Component {
-    render () {
-        return (
-            <View>
+function HomeScreen({ currentUserName, navigation }) {
+    return (
+        <View>
                 <Text>
-                    {`Hi ${this.props.currentUserName}`}
+                    {`Hi ${currentUserName}`}
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <LargeCard title={'All Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllItems'}></LargeCard>
-                    <LargeCard title={'Shared Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'shared'}></LargeCard>
-                    <LargeCard title={'Containers'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllContainers'}></LargeCard>
-                    <LargeCard title={'Categories'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllCategories'}></LargeCard>
+                    <TouchableOpacity onPress={() => navigation.navigate('AllItems')} style={styles.button}>
+                        <Text>All Items</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={styles.button}>
+                        <Text>Shared</Text>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllContainers')} style={styles.button}>
+                        <Text>All Containers</Text>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllCategories')} style={styles.button}>
+                        <Text>All Categories</Text>
+                    </TouchableOpacity>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
+                    <Footer ></Footer>
                 </View>
             </View>
-        )
-    }
+    )
 }
 
 export default HomeScreen;
