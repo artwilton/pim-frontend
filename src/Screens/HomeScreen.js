@@ -12,7 +12,7 @@ import Footer from '../Components/Footer/Footer'
 import { LargeCard } from '../Components/Body';
 import { styles } from '../Styles'
 
-function HomeScreen({ currentUserName, navigation }) {
+function HomeScreen({ currentUserName, navigation, style }) {
     return (
         <View>
                 <Text>
@@ -20,14 +20,14 @@ function HomeScreen({ currentUserName, navigation }) {
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('AllItems')} style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AllItems')} style={style.button}>
                         <Text>All Items</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>
                         <Text>Shared</Text>
-                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllContainers')} style={styles.button}>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllContainers')} style={style.button}>
                         <Text>All Containers</Text>
-                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllCategories')} style={styles.button}>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllCategories')} style={style.button}>
                         <Text>All Categories</Text>
                     </TouchableOpacity>
                 </View>

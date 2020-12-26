@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 /**
  * Sample React Native App
@@ -34,6 +35,7 @@ import { AddScreen, ContainedItemsScreen, EditScreen, HomeScreen, IndexScreen, L
 import { styles } from './src/Styles'
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 class App extends Component {
 
@@ -300,18 +302,19 @@ class App extends Component {
   render () {
       return (
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Tab.Navigator>
+            <Tab.Screen name="Home">
+              {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
+            </Tab.Screen>
+            {/* <Tab.Screen name="Settings" component={SettingsStackScreen} /> */}
+            <Tab.Screen name="Scan" component={ScanScreen} />
+            <Tab.Screen name="Add" component={AddScreen} />
+          </Tab.Navigator>
+          {/* <Stack.Navigator initialRouteName="Home">
 
             <Stack.Screen name="Login">
               {props => <LoginSignupScreen {...props} style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>}
             </Stack.Screen>
-
-            <Stack.Screen name="Home">
-              {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
-            </Stack.Screen>
-
-            <Stack.Screen name="Scan" component={ScanScreen} />
-            <Stack.Screen name="Add" component={AddScreen} />
             <Stack.Screen name="AllItems" component={IndexScreen} />
             <Stack.Screen name="AllContainers" component={IndexScreen} />
             <Stack.Screen name="AllCategories" component={IndexScreen} />
@@ -321,7 +324,7 @@ class App extends Component {
             <Stack.Screen name="ContainerEdit" component={EditScreen} />
             <Stack.Screen name="CategoryShow" component={ShowScreen} />
             <Stack.Screen name="CategoryEdit" component={EditScreen} />        
-          </Stack.Navigator>
+          </Stack.Navigator> */}
         </NavigationContainer>
           
           // <SafeAreaView>
