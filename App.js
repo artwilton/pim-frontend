@@ -37,6 +37,8 @@ import { styles } from './src/Styles'
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
+
 class App extends Component {
 
   state = {
@@ -55,6 +57,21 @@ class App extends Component {
   }
 
   // Temp Auth Functions
+
+  HomeTabs = () => {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home">
+          {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
+        </Tab.Screen>
+        <Tab.Screen name="Scan" component={ScanScreen} />
+        
+        <Tab.Screen name="Add">
+          {props => <AddScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
+        </Tab.Screen>
+      </Tab.Navigator>
+    );
+  }
 
   loginAuthHandler = (email) => {
     fetch(`http://10.0.2.2:3000/api/v1/users/`)
@@ -302,19 +319,13 @@ class App extends Component {
   render () {
       return (
         <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="Home">
-              {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
-            </Tab.Screen>
-            {/* <Tab.Screen name="Settings" component={SettingsStackScreen} /> */}
-            <Tab.Screen name="Scan" component={ScanScreen} />
-            <Tab.Screen name="Add" component={AddScreen} />
-          </Tab.Navigator>
-          {/* <Stack.Navigator initialRouteName="Home">
+          
+          <Stack.Navigator initialRouteName="Home">
 
             <Stack.Screen name="Login">
               {props => <LoginSignupScreen {...props} style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>}
             </Stack.Screen>
+            <Stack.Screen name="Home" component={this.HomeTabs} />
             <Stack.Screen name="AllItems" component={IndexScreen} />
             <Stack.Screen name="AllContainers" component={IndexScreen} />
             <Stack.Screen name="AllCategories" component={IndexScreen} />
@@ -324,7 +335,7 @@ class App extends Component {
             <Stack.Screen name="ContainerEdit" component={EditScreen} />
             <Stack.Screen name="CategoryShow" component={ShowScreen} />
             <Stack.Screen name="CategoryEdit" component={EditScreen} />        
-          </Stack.Navigator> */}
+          </Stack.Navigator>
         </NavigationContainer>
           
           // <SafeAreaView>

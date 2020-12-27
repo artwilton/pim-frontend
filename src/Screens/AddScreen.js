@@ -22,10 +22,6 @@ class AddScreen extends Component {
                 <View>
                     <NewItemForm addItem={this.props.addItem} containers={this.props.containers} categories={this.props.categories} ></NewItemForm>
                 </View>
-                <Text>--------------------------------------------------------------------------------------</Text>
-                <View>
-                    <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
-                </View>
             </View>
         )
     }

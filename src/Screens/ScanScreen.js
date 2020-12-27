@@ -21,9 +21,6 @@ class ScanScreen extends Component {
                     <Text>BODY</Text>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
-                <View>
-                    <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
-                </View>
             </View>
         )
     }

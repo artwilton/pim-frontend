@@ -32,9 +32,6 @@ function HomeScreen({ currentUserName, navigation, style }) {
                     </TouchableOpacity>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
-                <View>
-                    <Footer ></Footer>
-                </View>
             </View>
     )
 }

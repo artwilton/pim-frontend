@@ -50,9 +50,6 @@ function ShowScreen({ navigation }) {
             <Text>Delete {this.props.inputType}</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <Footer ></Footer>
-        </View>
       </ScrollView>
   );
 }
