@@ -58,20 +58,7 @@ class App extends Component {
 
   // Temp Auth Functions
 
-  HomeTabs = () => {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home">
-          {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
-        </Tab.Screen>
-        <Tab.Screen name="Scan" component={ScanScreen} />
-        
-        <Tab.Screen name="Add">
-          {props => <AddScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
-        </Tab.Screen>
-      </Tab.Navigator>
-    );
-  }
+  
 
   loginAuthHandler = (email) => {
     fetch(`http://10.0.2.2:3000/api/v1/users/`)
@@ -79,8 +66,8 @@ class App extends Component {
       .then((data) => {
         data.forEach((user) => {
           if (email === user.email) {
-            this.setCurrentUser(user)
-            this.setState({currentPage: 'Home'})
+            this.setCurrentUser(user),
+            () => navigation.navigate('Home')
           }
         });
       });
@@ -244,18 +231,7 @@ class App extends Component {
     let route = ''
 
     switch(this.state.currentPage) {
-      case 'Login':
-        route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
-        break;
-      case 'Home':
-        route = <HomeScreen setClickedObj={this.setClickedObj} style={styles} currentUserName={this.state.currentUserName}></HomeScreen>
-        break;
-      case 'Scan':
-        route = <ScanScreen setClickedObj={this.setClickedObj} style={styles}></ScanScreen>
-        break;
-      case 'Add':
-        route = <AddScreen addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}></AddScreen>
-        break;
+      
       case 'AllItems':
         route = <IndexScreen
         setSearchType={this.setSearchType}
@@ -316,25 +292,59 @@ class App extends Component {
     this.setState({searchType: searchType}, () => console.log(this.state.searchType))
   }
 
+  HomeTabs = () => {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home">
+          {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
+        </Tab.Screen>
+        <Tab.Screen name="Scan" component={ScanScreen} />
+        
+        <Tab.Screen name="Add">
+          {props => <AddScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
+        </Tab.Screen>
+      </Tab.Navigator>
+    );
+  }
+
   render () {
       return (
         <NavigationContainer>
           
-          <Stack.Navigator initialRouteName="Home">
-
-            <Stack.Screen name="Login">
-              {props => <LoginSignupScreen {...props} style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>}
-            </Stack.Screen>
-            <Stack.Screen name="Home" component={this.HomeTabs} />
-            <Stack.Screen name="AllItems" component={IndexScreen} />
-            <Stack.Screen name="AllContainers" component={IndexScreen} />
-            <Stack.Screen name="AllCategories" component={IndexScreen} />
-            <Stack.Screen name="ItemShow" component={ShowScreen} />
-            <Stack.Screen name="ItemEdit" component={EditScreen} />
-            <Stack.Screen name="ContainerShow" component={ShowScreen} />
-            <Stack.Screen name="ContainerEdit" component={EditScreen} />
-            <Stack.Screen name="CategoryShow" component={ShowScreen} />
-            <Stack.Screen name="CategoryEdit" component={EditScreen} />        
+          <Stack.Navigator initialRouteName="Login">
+            {this.state.currentUserId !== '' ? (
+              <>
+                <Stack.Screen name="Home" component={this.HomeTabs} />
+                <Stack.Screen name="AllItems">
+                  {props => <IndexScreen
+                  {...props}
+                  setSearchType={this.setSearchType}
+                  inputType={'Item'}
+                  searchValue={this.state.searchValue}
+                  searchHandler={this.searchHandler}
+                  items={this.filteredItems()}
+                  setClickedObj={this.setClickedObj}
+                  style={styles} /> }
+                </Stack.Screen>
+                
+                <Stack.Screen name="AllContainers" component={IndexScreen} />
+                <Stack.Screen name="AllCategories" component={IndexScreen} />
+                <Stack.Screen name="ItemShow" component={ShowScreen} />
+                <Stack.Screen name="ItemEdit" component={EditScreen} />
+                <Stack.Screen name="ContainerShow" component={ShowScreen} />
+                <Stack.Screen name="ContainerEdit" component={EditScreen} />
+                <Stack.Screen name="CategoryShow" component={ShowScreen} />
+                <Stack.Screen name="CategoryEdit" component={EditScreen} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="Login">
+                  {props => <LoginSignupScreen {...props} style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>}
+                </Stack.Screen>
+              </>
+            )            
+            }
+                    
           </Stack.Navigator>
         </NavigationContainer>
           
