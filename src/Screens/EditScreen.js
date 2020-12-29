@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import Footer from '../Components/Footer/Footer'
-import EditItemForm from '../Components/Forms/EditForms/EditItemForm';
+import EditItemForm from './EditScreens/EditItemScreen';
 
 function EditScreen (props) {
     return (

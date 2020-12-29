@@ -31,7 +31,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { AddScreen, ContainedItemsScreen, EditScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
+import { AddScreen, ContainedItemsScreen, EditCategoryScreen, EditContainerScreen, EditItemScreen, EditTypeScreen, EditUserScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
 import { styles } from './src/Styles'
 
 const Stack = createStackNavigator();
@@ -66,8 +66,7 @@ class App extends Component {
       .then((data) => {
         data.forEach((user) => {
           if (email === user.email) {
-            this.setCurrentUser(user),
-            () => navigation.navigate('Home')
+            this.setCurrentUser(user)
           }
         });
       });
@@ -143,7 +142,7 @@ class App extends Component {
 
   editItem = (itemObj) => {
 
-    let { id, name, description, notes, barcode, selected_container, selected_category, newPhoto } = itemObj
+    let { id, name, description, notes, barcode, container, category, newPhoto } = itemObj
 
     const formData = new FormData();
  
@@ -151,8 +150,8 @@ class App extends Component {
     this.formDataNullCheck(formData, 'description', description);
     this.formDataNullCheck(formData, 'notes', notes);
     this.formDataNullCheck(formData, 'barcode', barcode);
-    this.formDataNullCheck(formData, 'container_id', selected_container.id);
-    this.formDataNullCheck(formData, 'category_id', selected_category.id);
+    this.formDataNullCheck(formData, 'container_id', container.id);
+    this.formDataNullCheck(formData, 'category_id', category.id);
     this.formDataNullCheck(formData, 'photo', {
       name: newPhoto.fileName,
       type: newPhoto.type,
@@ -169,8 +168,7 @@ class App extends Component {
     .then(response => response.json())  
     .then((data) => {
       this.setState({ items: data.items },
-      ()=> this.setState({ filteredItems: data },
-      ()=> this.setState({currentPage: 'AllItems'})  )
+      ()=> this.setState({ filteredItems: data })
       );
     })
     .catch((error) => {
@@ -187,9 +185,7 @@ class App extends Component {
       .then((resp) => resp.json())
       .then((data) => {
         this.setState({ items: data.items },
-        ()=> this.setState({ filteredItems: this.state.items }, 
-        ()=> this.setState({currentPage: 'AllItems'}))
-        );
+        ()=> this.setState({ filteredItems: this.state.items }));
       });
   }
 
@@ -205,7 +201,7 @@ class App extends Component {
 
     switch(this.state.currentPage) {
       
-      case 'AllItems':
+      case 'ItemIndex':
         route = <IndexScreen
         setSearchType={this.setSearchType}
         inputType={'Item'}
@@ -215,10 +211,10 @@ class App extends Component {
         setClickedObj={this.setClickedObj}
         style={styles}></IndexScreen>
         break;
-      case 'AllContainers':
+      case 'ContainerIndex':
         route = <IndexScreen inputType={'Container'} containers={this.state.containers} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
         break;
-      case 'AllCategories':
+      case 'CategoryIndex':
         route = <IndexScreen inputType={'Category'}  categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
         break;
       case 'ItemShow':
@@ -288,7 +284,7 @@ class App extends Component {
             {this.state.currentUserId !== '' ? (
               <>
                 <Stack.Screen name="Home" component={this.HomeTabs} />
-                <Stack.Screen name="AllItems">
+                <Stack.Screen name="ItemIndex">
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
@@ -298,20 +294,20 @@ class App extends Component {
                   style={styles} /> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="AllContainers" component={IndexScreen} />
-                <Stack.Screen name="AllCategories" component={IndexScreen} />
+                <Stack.Screen name="ContainerIndex" component={IndexScreen} />
+                <Stack.Screen name="CategoryIndex" component={IndexScreen} />
                 <Stack.Screen name="ItemShow">
                   {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemEdit">
-                    {props => <EditScreen {...props} editItem={this.editItem} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>}
+                    {props => <EditItemScreen {...props} editItem={this.editItem} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
                 </Stack.Screen>
                 
                 <Stack.Screen name="ContainerShow" component={ShowScreen} />
-                <Stack.Screen name="ContainerEdit" component={EditScreen} />
+                <Stack.Screen name="ContainerEdit" component={EditContainerScreen} />
                 <Stack.Screen name="CategoryShow" component={ShowScreen} />
-                <Stack.Screen name="CategoryEdit" component={EditScreen} />
+                <Stack.Screen name="CategoryEdit" component={EditCategoryScreen} />
               </>
             ) : (
               <>

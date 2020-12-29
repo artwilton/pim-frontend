@@ -10,9 +10,8 @@ import {
   Image,
 } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {styles} from '../../../Styles';
 
-class EditItemForm extends Component {
+class EditCategoryScreen extends Component {
   state = {
     id: '',
     name: '',
@@ -100,19 +99,19 @@ class EditItemForm extends Component {
     return (
       <View>
         <Image
-          style={styles.fullSizePhoto}
+          style={this.props.styles.fullSizePhoto}
           source={{
             uri: `http://10.0.2.2:3000${this.state.photo}`,
           }}
         />
         <TouchableOpacity
           onPress={() => this.cameraTakePhoto()}
-          style={styles.button}>
+          style={this.props.styles.button}>
           <Text>Take New Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.uploadPhoto()}
-          style={styles.button}>
+          style={this.props.styles.button}>
           <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
@@ -156,8 +155,8 @@ class EditItemForm extends Component {
           {this.renderCategoryValues()}
         </Picker>
         <TouchableOpacity
-          onPress={() => this.props.editItem(this.state)}
-          style={styles.button}>
+          onPress={() => this.props.editItem(this.state), navigation.goBack()}
+          style={this.props.styles.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>
       </View>
@@ -165,4 +164,4 @@ class EditItemForm extends Component {
   }
 }
 
-export default EditItemForm;
+export default EditCategoryScreen;

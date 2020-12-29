@@ -19,7 +19,7 @@ function HomeScreen({ currentUserName, navigation, style }) {
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('AllItems')} style={style.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ItemIndex')} style={style.button}>
                         <Text>All Items</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>

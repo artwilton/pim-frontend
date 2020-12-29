@@ -44,7 +44,10 @@ function ShowScreen(props) {
         <View>
           <TouchableOpacity
             style={props.style.footerButton}
-            onPress={() => props.removeItem(clickedObj)}>
+            onPress={
+              // add in check here instead of optimistically rendering  
+              async () => { await props.removeItem(clickedObj); await props.navigation.navigate(`${props.inputType}Index`); }
+             }>
             <Text>Delete {props.inputType}</Text>
           </TouchableOpacity>
         </View>
