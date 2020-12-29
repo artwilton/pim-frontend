@@ -141,9 +141,9 @@ class App extends Component {
     }
   }
 
-  editItemPhoto = (itemObj) => {
+  editItem = (itemObj) => {
 
-    let { name, description, notes, barcode, selected_container, selected_category, newPhoto } = itemObj
+    let { id, name, description, notes, barcode, selected_container, selected_category, newPhoto } = itemObj
 
     const formData = new FormData();
  
@@ -161,7 +161,7 @@ class App extends Component {
 
     console.log(formData)
 
-    fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
+    fetch(`http://10.0.2.2:3000/api/v1/items/${id}/${this.state.currentUserId}`, {
       method: 'PUT',
       body: formData
     })
@@ -178,32 +178,6 @@ class App extends Component {
     });
    
   }
-
-  editItem = (item) => {
-    let { name, description, notes, barcode, selected_container, selected_category } = item
-    fetch(`http://10.0.2.2:3000/api/v1/items/${this.state.clickedObj.id}/${this.state.currentUserId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Accepts: "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        notes,
-        barcode,
-        container_id: selected_container.id,
-        category_id: selected_category.id
-      }),
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        this.setState({ items: data.items },
-        ()=> this.setState({ filteredItems: data },
-        ()=> this.setState({currentPage: 'AllItems'})  )
-        );
-      });
-  };
 
   removeItem = (item) => {
     fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_items/${item.id}`, {
@@ -327,10 +301,13 @@ class App extends Component {
                 <Stack.Screen name="AllContainers" component={IndexScreen} />
                 <Stack.Screen name="AllCategories" component={IndexScreen} />
                 <Stack.Screen name="ItemShow">
-                  {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
                 </Stack.Screen>
                 
-                <Stack.Screen name="ItemEdit" component={EditScreen} />
+                <Stack.Screen name="ItemEdit">
+                    {props => <EditScreen {...props} editItem={this.editItem} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>}
+                </Stack.Screen>
+                
                 <Stack.Screen name="ContainerShow" component={ShowScreen} />
                 <Stack.Screen name="ContainerEdit" component={EditScreen} />
                 <Stack.Screen name="CategoryShow" component={ShowScreen} />
