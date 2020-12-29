@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import Footer from '../Components/Footer/Footer';
 
-function ShowScreen({ navigation }) {
-  const { clickedObj } = route.params;
+function ShowScreen(props) {
+  const { clickedObj } = props.route.params;
   return (
     <ScrollView>
         <View>
             {clickedObj.photo ?
               <Image
-                style={this.props.style.fullSizePhoto}
+                style={props.style.fullSizePhoto}
                 source={{uri: `http://10.0.2.2:3000${clickedObj.photo}`}}
               />
             :
@@ -20,7 +18,7 @@ function ShowScreen({ navigation }) {
           <Text> Name: {clickedObj.name} </Text>
           <Text> Description: {clickedObj.description} </Text>
 
-          {this.props.inputType === 'Item' ? (
+          {props.inputType === 'Item' ? (
               <>
               <Text> BarCode: {clickedObj.barcode} </Text>
               <Text> Container: {clickedObj.container.name} </Text>
@@ -28,7 +26,7 @@ function ShowScreen({ navigation }) {
               </>
           ) : null}
 
-          {this.props.inputType === 'Container' ? (
+          {props.inputType === 'Container' ? (
             <>
               <Text> BarCode: {clickedObj.barcode} </Text>
             </>
@@ -37,17 +35,17 @@ function ShowScreen({ navigation }) {
         </View>
         <View>
           <TouchableOpacity
-            style={this.props.style.footerButton}
-            onPress={() => navigation.navigate('Edit'), {clickedObj: clickedObj}}
+            style={props.style.footerButton}
+            onPress={() => props.navigation.navigate(`${props.inputType}Edit`, {clickedObj: clickedObj})}
           >
-            <Text>Edit {this.props.inputType}</Text>
+            <Text>Edit {props.inputType}</Text>
           </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity
-            style={this.props.style.footerButton}
-            onPress={() => this.props.removeItem(clickedObj)}>
-            <Text>Delete {this.props.inputType}</Text>
+            style={props.style.footerButton}
+            onPress={() => props.removeItem(clickedObj)}>
+            <Text>Delete {props.inputType}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

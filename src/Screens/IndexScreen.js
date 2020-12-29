@@ -5,41 +5,39 @@ import {
   ScrollView,
 } from 'react-native';
 
-import Footer from '../Components/Footer/Footer'
 import Search from'../Components/Search'
 
-class IndexScreen extends Component {
+function renderCards(props) {
 
-    inputTypeCheck = () => {
-        let objToRender = []
-        if (this.props.items) {
-            objToRender = this.props.items
-        } else if (this.props.containers) {
-            objToRender = this.props.containers
-        } else if (this.props.categories) {
-            objToRender = this.props.categories
-        }
-        return objToRender
+    let objToRender = []
+    let route = 'Home'
+
+    if (props.items) {
+        objToRender = props.items,
+        route = 'ItemShow'
+    } else if (props.containers) {
+        objToRender = props.containers,
+        route = 'ContainerShow'
+    } else if (props.categories) {
+        objToRender = props.categories,
+        route = 'CategoryShow'
     }
 
-    renderCards = () => {
+    return objToRender.map((obj) => (
+        <Text key={obj.id} onPress={() => props.navigation.navigate(route, {clickedObj: obj})}>{obj.name}</Text>
+    ));
+}
+
+function IndexScreen(props) {
+
+    return (
         
-
-
-        return this.inputTypeCheck().map((obj) => (
-            <Text key={obj.id} onPress={() => this.props.buttonRouteHandler(`${this.props.inputType}Show`, obj)}>{this.props.inputType}: {obj.name}</Text>
-        ));
-      };
-
-    render () {
-        return (
-            <ScrollView>
-                    {this.props.items ? <Search setSearchType={this.props.setSearchType} searchType={'Name'} searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
-                    {this.props.items ? <Search setSearchType={this.props.setSearchType} searchType={'Category'} searchValue={this.props.searchValue} searchHandler={this.props.searchHandler}/> : null }
-                    {this.renderCards()}
-            </ScrollView>
-        )
-    }
+    <ScrollView>
+        {/* {props.items ? <Search setSearchType={props.setSearchType} searchType={'Name'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null }
+        {props.items ? <Search setSearchType={props.setSearchType} searchType={'Category'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null } */}
+        {renderCards(props)}
+    </ScrollView>    
+    )
 }
 
 export default IndexScreen;

@@ -10,7 +10,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Footer from '../Components/Footer/Footer'
 import { LargeCard } from '../Components/Body';
-import { styles } from '../Styles'
 
 function HomeScreen({ currentUserName, navigation, style }) {
     return (

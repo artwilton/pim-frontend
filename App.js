@@ -91,8 +91,7 @@ class App extends Component {
   };
 
   setCurrentUser = user => {
-    this.setState({ currentUserId: user.id }, this.fetchUser);
-    this.setState({ currentUserName: user.name });
+    this.setState({ currentUserId: user.id, currentUserName: user.name }, this.fetchUser);
   }
 
   // Fetch
@@ -319,17 +318,18 @@ class App extends Component {
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
-                  inputType={'Item'}
                   searchValue={this.state.searchValue}
                   searchHandler={this.searchHandler}
                   items={this.filteredItems()}
-                  setClickedObj={this.setClickedObj}
                   style={styles} /> }
                 </Stack.Screen>
                 
                 <Stack.Screen name="AllContainers" component={IndexScreen} />
                 <Stack.Screen name="AllCategories" component={IndexScreen} />
-                <Stack.Screen name="ItemShow" component={ShowScreen} />
+                <Stack.Screen name="ItemShow">
+                  {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} style={styles}></ShowScreen>}
+                </Stack.Screen>
+                
                 <Stack.Screen name="ItemEdit" component={EditScreen} />
                 <Stack.Screen name="ContainerShow" component={ShowScreen} />
                 <Stack.Screen name="ContainerEdit" component={EditScreen} />
