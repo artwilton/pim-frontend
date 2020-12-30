@@ -2,16 +2,6 @@ import React, {Component} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Footer from '../Components/Footer/Footer';
 
-function imageSourceCheck(clickedObj) {
-  let imageSource = {}
-  clickedObj.originalPhoto ?
-  imageSource = {uri: clickedObj.photo.uri}
-  :
-  imageSource = {uri: `http://10.0.2.2:3000${clickedObj.photo.uri}`}
-
-  return imageSource
-}
-
 function ShowScreen(props) {
   const { clickedObj } = props.route.params;
   
@@ -21,7 +11,7 @@ function ShowScreen(props) {
             {clickedObj.photo.uri ?
               <Image
                 style={props.style.fullSizePhoto}
-                source={imageSourceCheck(clickedObj)}
+                source={{uri: `http://10.0.2.2:3000${clickedObj.photo.uri}`}}
               />
             :
               null

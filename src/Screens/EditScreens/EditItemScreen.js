@@ -104,7 +104,7 @@ class EditItemScreen extends Component {
     imageSource = {uri: this.state.photo.uri}
     :
     imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
-
+    
     return imageSource
   }
 
