@@ -2,15 +2,26 @@ import React, {Component} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Footer from '../Components/Footer/Footer';
 
+function imageSourceCheck(clickedObj) {
+  let imageSource = {}
+  clickedObj.originalPhoto ?
+  imageSource = {uri: clickedObj.photo.uri}
+  :
+  imageSource = {uri: `http://10.0.2.2:3000${clickedObj.photo.uri}`}
+
+  return imageSource
+}
+
 function ShowScreen(props) {
   const { clickedObj } = props.route.params;
+  
   return (
     <ScrollView>
         <View>
-            {clickedObj.photo ?
+            {clickedObj.photo.uri ?
               <Image
                 style={props.style.fullSizePhoto}
-                source={{uri: `http://10.0.2.2:3000${clickedObj.photo}`}}
+                source={imageSourceCheck(clickedObj)}
               />
             :
               null
@@ -45,8 +56,7 @@ function ShowScreen(props) {
           <TouchableOpacity
             style={props.style.footerButton}
             onPress={
-              // add in check here instead of optimistically rendering  
-              async () => { await props.removeItem(clickedObj); await props.navigation.navigate(`${props.inputType}Index`); }
+              async () => { await props.removeItem(clickedObj, props.inputType)}
              }>
             <Text>Delete {props.inputType}</Text>
           </TouchableOpacity>

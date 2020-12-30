@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { navigationRef, navigate } from './RootNavigation';
 
 /**
  * Sample React Native App
@@ -36,8 +37,6 @@ import { styles } from './src/Styles'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
 
 class App extends Component {
 
@@ -133,16 +132,37 @@ class App extends Component {
 
   formDataNullCheck = (formData, name, value) => {
 
-    if ((name !== 'photo' && value ) || (name === 'photo' && value.uri)) {
+    if ((name !== 'photo' && value ) || (name === 'photo' && value.type)) {
       formData.append(name, value);
     } else if (name !== 'photo' && !value ) {
       formData.append(name, '');
     }
   }
 
+  editItemFetch = async (formData, itemObj) => {
+
+    console.log('formData', formData)
+
+    // try {
+      let resp = await fetch(`http://10.0.2.2:3000/api/v1/items/${itemObj.id}/${this.state.currentUserId}`, {
+        method: 'PUT',
+        body: formData
+      });
+      let data = await resp.json();
+    // } catch(error) {
+    //   console.log('upload error', error)
+    // }
+
+    await this.setState({ items: data.items });
+    await this.setState({ filteredItems: data });
+    await navigate('ItemShow', {clickedObj: this.state.items.find(item => item.id === itemObj.id)});
+  }
+
   editItem = (itemObj) => {
 
-    let { id, name, description, notes, barcode, container, category, newPhoto } = itemObj
+    let { id, name, description, notes, barcode, container, category, photo } = itemObj
+
+    console.log('itemObj', itemObj)
 
     const formData = new FormData();
  
@@ -153,40 +173,30 @@ class App extends Component {
     this.formDataNullCheck(formData, 'container_id', container.id);
     this.formDataNullCheck(formData, 'category_id', category.id);
     this.formDataNullCheck(formData, 'photo', {
-      name: newPhoto.fileName,
-      type: newPhoto.type,
-      uri: Platform.OS === 'android' ? newPhoto.uri : newPhoto.uri.replace('file://', ''),
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
     });
 
-    console.log(formData)
-
-    fetch(`http://10.0.2.2:3000/api/v1/items/${id}/${this.state.currentUserId}`, {
-      method: 'PUT',
-      body: formData
-    })
-
-    .then(response => response.json())  
-    .then((data) => {
-      this.setState({ items: data.items },
-      ()=> this.setState({ filteredItems: data })
-      );
-    })
-    .catch((error) => {
-      console.log('upload error', error);
-    });
-   
+    this.editItemFetch(formData, itemObj);
+  
   }
 
-  removeItem = (item) => {
-    fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_items/${item.id}`, {
-      method: "DELETE",
-    })
+  removeItem = async (item, inputType) => {
 
-      .then((resp) => resp.json())
-      .then((data) => {
-        this.setState({ items: data.items },
-        ()=> this.setState({ filteredItems: this.state.items }));
-      });
+    // try {
+      let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_items/${item.id}`, {
+        method: "DELETE"
+      })
+  
+      let data = await resp.json();
+    // } catch(error) {
+    //   console.log('delete error', error)
+    // }
+    await this.setState({ items: data.items });
+    await this.setState({ filteredItems: this.state.items });
+    await navigate(`${inputType}Index`);
+
   }
 
   // Routing
@@ -221,7 +231,7 @@ class App extends Component {
         route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
         break;
       case 'ItemEdit':
-        route = <EditScreen editItemPhoto={this.editItemPhoto} editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
+        route = <EditScreen editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
         break;
       case 'ContainerShow':
         route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
@@ -278,7 +288,7 @@ class App extends Component {
 
   render () {
       return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           
           <Stack.Navigator initialRouteName="Login">
             {this.state.currentUserId !== '' ? (

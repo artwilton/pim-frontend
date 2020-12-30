@@ -21,8 +21,8 @@ class EditItemScreen extends Component {
     barcode: '',
     container: {},
     category: {},
-    photo: '',
-    newPhoto: {},
+    photo: {},
+    originalPhoto: {}
   };
 
   componentDidMount() {
@@ -61,7 +61,8 @@ class EditItemScreen extends Component {
         maxWidth: 200,
       },
       (response) => {
-        this.setState({newPhoto: response});
+        const orignalPhotoObj = {uri: this.state.photo.uri}
+        this.setState({photo: response, originalPhoto: orignalPhotoObj});
       },
     );
   };
@@ -75,7 +76,8 @@ class EditItemScreen extends Component {
         maxWidth: 200,
       },
       (response) => {
-        this.setState({newPhoto: response});
+        const orignalPhotoObj = {uri: this.state.photo.uri}
+        this.setState({photo: response, originalPhoto: orignalPhotoObj}, ()=> console.log(this.state));
       },
     );
   };
@@ -96,14 +98,22 @@ class EditItemScreen extends Component {
     ));
   };
 
+  imageSourceCheck = () => {
+    let imageSource = {}
+    this.state.originalPhoto.uri ?
+    imageSource = {uri: this.state.photo.uri}
+    :
+    imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
+
+    return imageSource
+  }
+
   render() {
     return (
       <ScrollView>
         <Image
           style={this.props.style.fullSizePhoto}
-          source={{
-            uri: `http://10.0.2.2:3000${this.state.photo}`,
-          }}
+          source={this.imageSourceCheck()}
         />
         <TouchableOpacity
           onPress={() => this.cameraTakePhoto()}
@@ -156,10 +166,7 @@ class EditItemScreen extends Component {
           {this.renderCategoryValues()}
         </Picker>
         <TouchableOpacity
-        onPress={
-          // add in check here instead of optimistically rendering  
-          async () => { await this.props.editItem(this.state); await this.props.navigation.navigate('ItemShow', {clickedObj: this.state}); }
-         }>
+        onPress={() => this.props.editItem(this.state) }>
           <Text>Save Changes</Text>
         </TouchableOpacity>
       </ScrollView>
