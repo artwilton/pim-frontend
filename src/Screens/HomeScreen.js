@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Footer from '../Components/Footer/Footer'
 import { LargeCard } from '../Components/Body';
 
 function HomeScreen({ currentUserName, navigation, style }) {

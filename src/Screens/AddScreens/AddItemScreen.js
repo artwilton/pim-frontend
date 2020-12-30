@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import {Picker} from '@react-native-picker/picker';
 import { Text, TextInput, View, Keyboard, TouchableOpacity } from 'react-native';
-import { styles } from  '../../../Styles'
 
 class NewItemForm extends Component {
   state = {
@@ -76,7 +75,7 @@ class NewItemForm extends Component {
           }>
           {this.renderCategoryValues()}
         </Picker>
-        <TouchableOpacity onPress={() => this.props.addItem(this.state)} style={styles.button}>
+        <TouchableOpacity onPress={() => this.props.addItem(this.state)} style={this.props.style.button}>
             <Text>Submit</Text>
         </TouchableOpacity>
       </View>

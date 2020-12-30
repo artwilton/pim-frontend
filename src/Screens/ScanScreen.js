@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Footer from '../Components/Footer/Footer'
-
 class ScanScreen extends Component {
     render () {
         return (

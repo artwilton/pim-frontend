@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { navigationRef, navigate } from './RootNavigation';
@@ -32,11 +32,24 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { AddScreen, ContainedItemsScreen, EditCategoryScreen, EditContainerScreen, EditItemScreen, EditTypeScreen, EditUserScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
+import { AddScreenMain, ContainedItemsScreen, EditCategoryScreen, EditContainerScreen, EditItemScreen, EditTypeScreen, EditUserScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
 import { styles } from './src/Styles'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+// Used for getting correct header for nested Tab Navigation
+function getHeaderTitle(route) {
+
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
+  switch (routeName) {
+    case 'Scan':
+      return 'Scan';
+    case 'Add':
+      return 'Add';
+  }
+}
 
 class App extends Component {
 
@@ -280,7 +293,7 @@ class App extends Component {
         <Tab.Screen name="Scan" component={ScanScreen} />
         
         <Tab.Screen name="Add">
-          {props => <AddScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
+          {props => <AddScreenMain {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
         </Tab.Screen>
       </Tab.Navigator>
     );
@@ -293,7 +306,12 @@ class App extends Component {
           <Stack.Navigator initialRouteName="Login">
             {this.state.currentUserId !== '' ? (
               <>
-                <Stack.Screen name="Home" component={this.HomeTabs} />
+                <Stack.Screen name="Home"
+                  component={this.HomeTabs}
+                  options={({ route }) => ({
+                    headerTitle: getHeaderTitle(route),
+                  })}
+                />
                 <Stack.Screen name="ItemIndex">
                   {props => <IndexScreen
                   {...props}

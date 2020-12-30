@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
-import Footer from '../Components/Footer/Footer';
 
 function ShowScreen(props) {
   const { clickedObj } = props.route.params;
@@ -36,7 +35,7 @@ function ShowScreen(props) {
         </View>
         <View>
           <TouchableOpacity
-            style={props.style.footerButton}
+            style={props.style.button}
             onPress={() => props.navigation.navigate(`${props.inputType}Edit`, {clickedObj: clickedObj})}
           >
             <Text>Edit {props.inputType}</Text>
@@ -44,7 +43,7 @@ function ShowScreen(props) {
         </View>
         <View>
           <TouchableOpacity
-            style={props.style.footerButton}
+            style={props.style.button}
             onPress={
               async () => { await props.removeItem(clickedObj, props.inputType)}
              }>
