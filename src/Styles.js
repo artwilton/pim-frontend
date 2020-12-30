@@ -13,6 +13,13 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '80%',
   },
+  largeButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+    width: '80%',
+  },
   footerButton: {
     alignItems: 'center',
     justifyContent: 'center',
