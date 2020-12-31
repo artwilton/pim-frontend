@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { AddCategoryScreen, AddContainerScreen, AddItemScreen, AddTypeScreen} from '../../Screens'
-
 function AddScreenMain ({navigation, style })  {
     return (
         <View>

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import Footer from '../Components/Footer/Footer'
-import EditItemForm from './EditScreens/EditItemScreen';
+import EditItemScreen from './EditScreens/EditItemScreen';
 
 function EditScreen (props) {
     return (
@@ -19,7 +19,7 @@ function EditScreen (props) {
             </Text>
             <Text>--------------------------------------------------------------------------------------</Text>
             <View>
-                <EditItemForm editItem={props.editItem} clickedObj={props.route.params.clickedObj} containers={props.containers} categories={props.categories} ></EditItemForm>
+                <EditItemScreen itemFormHandler={props.itemFormHandler} clickedObj={props.route.params.clickedObj} containers={props.containers} categories={props.categories} ></EditItemScreen>
             </View>
         </ScrollView>
     )

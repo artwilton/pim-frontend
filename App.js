@@ -118,33 +118,9 @@ class App extends Component {
 
   }
 
-  addItem = (item) => {
-    let { name, description, notes, barcode, container, category } = item
-    fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accepts: "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        notes,
-        barcode,
-        container_id: container.id,
-        category_id: category.id
-      }),
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        this.setState({ items: [...this.state.items, data] },
-        ()=> this.setState({ filteredItems: this.state.items })
-        );
-      });
-  };
-
+  
   formDataNullCheck = (formData, name, value) => {
-
+    
     if ((name !== 'photo' && value ) || (name === 'photo' && value.type)) {
       formData.append(name, value);
     } else if (name !== 'photo' && !value ) {
@@ -152,26 +128,7 @@ class App extends Component {
     }
   }
 
-  editItemFetch = async (formData, itemObj) => {
-
-    console.log('formData', formData)
-
-    // try {
-      let resp = await fetch(`http://10.0.2.2:3000/api/v1/items/${itemObj.id}/${this.state.currentUserId}`, {
-        method: 'PUT',
-        body: formData
-      });
-      let data = await resp.json();
-    // } catch(error) {
-    //   console.log('upload error', error)
-    // }
-
-    await this.setState({ items: data.items });
-    await this.setState({ filteredItems: data });
-    await navigate('ItemShow', {clickedObj: this.state.items.find(item => item.id === itemObj.id)});
-  }
-
-  editItem = (itemObj) => {
+  itemFormHandler = (itemObj, type) => {
 
     let { id, name, description, notes, barcode, container, category, photo } = itemObj
 
@@ -191,8 +148,53 @@ class App extends Component {
       uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
     });
 
-    this.editItemFetch(formData, itemObj);
-  
+    switch(type) {
+      case 'edit':
+        this.editItemFetch(formData, itemObj);
+        break;
+      case 'add':
+        this.addItemFetch(formData, itemObj);
+        break;
+      default:
+        console.log('Error: invalid form type')
+    } 
+
+  };
+
+  addItemFetch = async (formData) => {
+
+       // try {
+        let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items/new`, {
+          method: "POST",
+          body: formData
+        });
+        let data = await resp.json();
+      // } catch(error) {
+      //   console.log('upload error', error)
+      // }
+
+      await console.log('uploaded item', data)
+
+      await this.setState({ items: [...this.state.items, data]});
+      await this.setState({ filteredItems: this.state.items });
+      await navigate('ItemIndex');
+  }
+
+  editItemFetch = async (formData, itemObj) => {
+
+    // try {
+      let resp = await fetch(`http://10.0.2.2:3000/api/v1/items/${itemObj.id}/${this.state.currentUserId}`, {
+        method: 'PUT',
+        body: formData
+      });
+      let data = await resp.json();
+    // } catch(error) {
+    //   console.log('upload error', error)
+    // }
+
+    await this.setState({ items: data.items });
+    await this.setState({ filteredItems: this.state.items });
+    await navigate('ItemShow', {clickedObj: this.state.items.find(item => item.id === itemObj.id)});
   }
 
   removeItem = async (item, inputType) => {
@@ -244,7 +246,7 @@ class App extends Component {
         route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
         break;
       case 'ItemEdit':
-        route = <EditScreen editItem={this.editItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
+        route = <EditScreen itemFormHandler={this.itemFormHandler} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
         break;
       case 'ContainerShow':
         route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
@@ -329,19 +331,19 @@ class App extends Component {
                 </Stack.Screen>
 
                 <Stack.Screen name="AddItem">
-                  {props => <AddItemScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddItemScreen> }
+                  {props => <AddItemScreen {...props} itemFormHandler={this.itemFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddItemScreen> }
                 </Stack.Screen>
 
                 <Stack.Screen name="AddContainer">
-                  {props => <AddContainerScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
+                  {props => <AddContainerScreen {...props} itemFormHandler={this.itemFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
                 </Stack.Screen>
 
                 <Stack.Screen name="AddCategory">
-                  {props => <AddCategoryScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddCategoryScreen> }
+                  {props => <AddCategoryScreen {...props} itemFormHandler={this.itemFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddCategoryScreen> }
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemEdit">
-                    {props => <EditItemScreen {...props} editItem={this.editItem} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
+                    {props => <EditItemScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
                 </Stack.Screen>
                 
                 <Stack.Screen name="ContainerShow" component={ShowScreen} />

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, TextInput, View, Keyboard, TouchableOpacity } from 'react-native';
+import { Text, TextInput, ScrollView, View, Image, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
@@ -64,18 +64,17 @@ class NewItemForm extends Component {
 
   imageSourceCheck = () => {
     let imageSource = {}
-    this.state.originalPhoto.uri ?
+    this.state.photo.uri ?
     imageSource = {uri: this.state.photo.uri}
     :
-    imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
+    imageSource = require('../../../src/assets/img/default_item_photo.png')
     
     return imageSource
   }
 
   render() {
     return (
-      <View>
-        <Text>New Item Form</Text>
+      <ScrollView>
         <Image
           style={this.props.style.fullSizePhoto}
           source={this.imageSourceCheck()}
@@ -128,10 +127,10 @@ class NewItemForm extends Component {
           }>
           {this.renderCategoryValues()}
         </Picker>
-        <TouchableOpacity onPress={() => this.props.addItem(this.state)} style={this.props.style.button}>
+        <TouchableOpacity onPress={() => this.props.itemFormHandler(this.state, 'add')} style={this.props.style.button}>
             <Text>Submit</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 }

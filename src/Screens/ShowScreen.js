@@ -1,20 +1,27 @@
 import React, {Component} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 
+function imageSourceCheck (clickedObj) {
+  let imageSource = {}
+
+  clickedObj.photo.uri ?
+    imageSource = {uri: `http://10.0.2.2:3000${clickedObj.photo.uri}`}
+  :
+    imageSource = require('../../src/assets/img/default_item_photo.png')
+
+  return imageSource
+}
+
 function ShowScreen(props) {
   const { clickedObj } = props.route.params;
   
   return (
     <ScrollView>
         <View>
-            {clickedObj.photo.uri ?
               <Image
                 style={props.style.fullSizePhoto}
-                source={{uri: `http://10.0.2.2:3000${clickedObj.photo.uri}`}}
+                source={imageSourceCheck(clickedObj)}
               />
-            :
-              null
-            }
           <Text> Name: {clickedObj.name} </Text>
           <Text> Description: {clickedObj.description} </Text>
 

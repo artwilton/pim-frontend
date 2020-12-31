@@ -166,7 +166,7 @@ class EditItemScreen extends Component {
           {this.renderCategoryValues()}
         </Picker>
         <TouchableOpacity
-        onPress={() => this.props.editItem(this.state) }
+        onPress={() => this.props.itemFormHandler(this.state, 'edit') }
         style={this.props.style.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>
