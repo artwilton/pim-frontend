@@ -7,7 +7,7 @@ import {
 
 import { AddCategoryScreen, AddContainerScreen, AddItemScreen, AddTypeScreen} from '../../Screens'
 
-function AddScreenMain (props) {
+function AddScreenMain ({navigation, style })  {
     return (
         <View>
             <Text>
@@ -15,7 +15,15 @@ function AddScreenMain (props) {
             </Text>
             <Text>--------------------------------------------------------------------------------------</Text>
             <View>
-                <AddItemScreen addItem={props.addItem} containers={props.containers} categories={props.categories} style={props.style}></AddItemScreen>
+                <TouchableOpacity onPress={() => navigation.navigate('AddItem')} style={style.largeButton}>
+                    <Text>Add Item</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AddContainer')} style={style.largeButton}>
+                    <Text>Add Container</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AddCategory')} style={style.largeButton}>
+                    <Text>Add Category</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )

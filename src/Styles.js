@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DDDDDD',
-    padding: 10,
+    padding: 30,
     width: '80%',
   },
   fullSizePhoto: {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-
-import {Picker} from '@react-native-picker/picker';
 import { Text, TextInput, View, Keyboard, TouchableOpacity } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 class NewItemForm extends Component {
   state = {
@@ -10,12 +10,41 @@ class NewItemForm extends Component {
     notes: '',
     barcode: '',
     container: {},
-    category: {}
+    category: {},
+    photo: {}
   };
 
   componentDidMount() {
     this.setState({container: this.props.containers[0], category: this.props.categories[0]})
   }
+
+  cameraTakePhoto = () => {
+    return launchCamera(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 200,
+        maxWidth: 200,
+      },
+      (response) => {
+        this.setState({photo: response});
+      },
+    );
+  };
+
+  uploadPhoto = () => {
+    return launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 200,
+        maxWidth: 200,
+      },
+      (response) => {
+        this.setState({photo: response});
+      },
+    );
+  };
 
   newItemFormHandler = (text, name) => {
     this.setState({[name]: text});
@@ -33,10 +62,34 @@ class NewItemForm extends Component {
   ));
   }
 
+  imageSourceCheck = () => {
+    let imageSource = {}
+    this.state.originalPhoto.uri ?
+    imageSource = {uri: this.state.photo.uri}
+    :
+    imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
+    
+    return imageSource
+  }
+
   render() {
     return (
       <View>
         <Text>New Item Form</Text>
+        <Image
+          style={this.props.style.fullSizePhoto}
+          source={this.imageSourceCheck()}
+        />
+        <TouchableOpacity
+          onPress={() => this.cameraTakePhoto()}
+          style={this.props.style.button}>
+          <Text>Add Item Photo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.uploadPhoto()}
+          style={this.props.style.button}>
+          <Text>Upload Item Photo</Text>
+        </TouchableOpacity>
         <TextInput
           onChangeText={(text) => this.newItemFormHandler(text, 'name')}
           placeholder={'Item Name'}

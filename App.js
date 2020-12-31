@@ -32,7 +32,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { AddScreenMain, ContainedItemsScreen, EditCategoryScreen, EditContainerScreen, EditItemScreen, EditTypeScreen, EditUserScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
+import { AddScreenMain, AddItemScreen, AddContainerScreen, AddCategoryScreen, ContainedItemsScreen, EditCategoryScreen, EditContainerScreen, EditItemScreen, EditTypeScreen, EditUserScreen, HomeScreen, IndexScreen, LoginSignupScreen, NewScreen, ScanScreen, ShowScreen } from './src/Screens' ;
 import { styles } from './src/Styles'
 
 const Stack = createStackNavigator();
@@ -293,7 +293,7 @@ class App extends Component {
         <Tab.Screen name="Scan" component={ScanScreen} />
         
         <Tab.Screen name="Add">
-          {props => <AddScreenMain {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}/>}
+          {props => <AddScreenMain {...props} style={styles}/>}
         </Tab.Screen>
       </Tab.Navigator>
     );
@@ -326,6 +326,18 @@ class App extends Component {
                 <Stack.Screen name="CategoryIndex" component={IndexScreen} />
                 <Stack.Screen name="ItemShow">
                   {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
+                </Stack.Screen>
+
+                <Stack.Screen name="AddItem">
+                  {props => <AddItemScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddItemScreen> }
+                </Stack.Screen>
+
+                <Stack.Screen name="AddContainer">
+                  {props => <AddContainerScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
+                </Stack.Screen>
+
+                <Stack.Screen name="AddCategory">
+                  {props => <AddCategoryScreen {...props} addItem={this.addItem} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddCategoryScreen> }
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemEdit">
