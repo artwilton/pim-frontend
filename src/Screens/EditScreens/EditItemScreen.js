@@ -26,7 +26,7 @@ class EditItemScreen extends Component {
   };
 
   componentDidMount() {
-    console.log('clicked obj', this.props.route.params.clickedObj);
+    console.log('edit form clicked obj', this.props.route.params.clickedObj);
     let {
       id,
       name,
@@ -48,9 +48,16 @@ class EditItemScreen extends Component {
         category,
         photo,
       },
-      () => console.log('mounted state', this.state),
+      () => console.log('edit form mounted state', this.state),
     );
   }
+
+  // Local Form Handler
+  editItemFormHandler = (text, name) => {
+    this.setState({[name]: text});
+  };
+
+  // Camera and Upload Functions
 
   cameraTakePhoto = () => {
     return launchCamera(
@@ -60,10 +67,7 @@ class EditItemScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
-        const orignalPhotoObj = {uri: this.state.photo.uri}
-        this.setState({photo: response, originalPhoto: orignalPhotoObj});
-      },
+      this.addImageCheck
     );
   };
 
@@ -75,17 +79,37 @@ class EditItemScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
-        const orignalPhotoObj = {uri: this.state.photo.uri}
-        this.setState({photo: response, originalPhoto: orignalPhotoObj}, ()=> console.log(this.state));
-      },
+      this.addImageCheck
     );
   };
 
-  editItemFormHandler = (text, name) => {
-    this.setState({[name]: text});
-  };
+  // Handle setting the correct photo and originalPhoto state
+  addImageCheck = (response) => {
+    const orignalPhotoObj = {
+      uri: (this.state.photo.uri && this.state.photo.uri.startsWith('/')) ?
+        this.state.photo.uri
+      :
+        '../../../src/assets/img/default_item_photo.png'
+    }
+    this.setState({photo: response, originalPhoto: orignalPhotoObj});
+  }
 
+  // Handle correct source for Image component
+  imageSourceCheck = () => {
+    let imageSource = {}
+
+    if (this.state.originalPhoto.uri) {
+      imageSource = {uri: this.state.photo.uri}
+    } else if (this.state.photo.uri) {
+      imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
+    } else {
+      imageSource = require('../../../src/assets/img/default_item_photo.png')
+    }
+    
+    return imageSource
+  }
+
+  // Include all containers and categories a user has in form
   renderContainerValues = () => {
     return this.props.containers.map((obj) => (
       <Picker.Item key={obj.id} label={obj.name} value={obj} />
@@ -97,16 +121,6 @@ class EditItemScreen extends Component {
       <Picker.Item key={obj.id} label={obj.name} value={obj} />
     ));
   };
-
-  imageSourceCheck = () => {
-    let imageSource = {}
-    this.state.originalPhoto.uri ?
-    imageSource = {uri: this.state.photo.uri}
-    :
-    imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
-    
-    return imageSource
-  }
 
   render() {
     return (
@@ -150,9 +164,7 @@ class EditItemScreen extends Component {
           selectedValue={this.state.container}
           style={{height: 50, width: 300}}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({container: itemValue}, () =>
-              console.log('containers', this.state.container),
-            )
+            this.setState({container: itemValue})
           }>
           {this.renderContainerValues()}
         </Picker>
