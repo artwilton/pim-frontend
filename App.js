@@ -324,10 +324,24 @@ class App extends Component {
                   style={styles} /> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="ContainerIndex" component={IndexScreen} />
-                <Stack.Screen name="CategoryIndex" component={IndexScreen} />
+                <Stack.Screen name="ContainerIndex">
+                  {props => <IndexScreen {...props} containers={this.state.containers} style={styles}></IndexScreen>}
+                </Stack.Screen>
+
+                <Stack.Screen name="CategoryIndex">
+                  {props => <IndexScreen {...props} categories={this.state.categories} style={styles}></IndexScreen>}
+                </Stack.Screen>
+                
                 <Stack.Screen name="ItemShow">
-                  {props => <ShowScreen {...props} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
+                </Stack.Screen>
+
+                <Stack.Screen name="ContainerShow">
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Container'} style={styles}></ShowScreen>}
+                </Stack.Screen>
+
+                <Stack.Screen name="CategoryShow">
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Category'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="AddItem">
@@ -346,9 +360,7 @@ class App extends Component {
                     {props => <EditItemScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
                 </Stack.Screen>
                 
-                <Stack.Screen name="ContainerShow" component={ShowScreen} />
                 <Stack.Screen name="ContainerEdit" component={EditContainerScreen} />
-                <Stack.Screen name="CategoryShow" component={ShowScreen} />
                 <Stack.Screen name="CategoryEdit" component={EditCategoryScreen} />
               </>
             ) : (

@@ -23,9 +23,9 @@ function HomeScreen({ currentUserName, navigation, style }) {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>
                         <Text>Shared</Text>
-                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllContainers')} style={style.button}>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('ContainerIndex')} style={style.button}>
                         <Text>All Containers</Text>
-                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('AllCategories')} style={style.button}>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('CategoryIndex')} style={style.button}>
                         <Text>All Categories</Text>
                     </TouchableOpacity>
                 </View>

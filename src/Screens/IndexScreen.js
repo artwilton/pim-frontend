@@ -33,8 +33,8 @@ function IndexScreen(props) {
     return (
         
     <ScrollView>
-        {/* {props.items ? <Search setSearchType={props.setSearchType} searchType={'Name'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null }
-        {props.items ? <Search setSearchType={props.setSearchType} searchType={'Category'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null } */}
+        {props.items ? <Search setSearchType={props.setSearchType} searchType={'Name'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null }
+        {/* {props.items ? <Search setSearchType={props.setSearchType} searchType={'Category'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null } */}
         {renderCards(props)}
     </ScrollView>    
     )
