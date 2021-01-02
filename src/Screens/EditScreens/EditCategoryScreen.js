@@ -41,7 +41,7 @@ class EditCategoryScreen extends Component {
   }
 
   // Local Form Handler
-  editCategoryFormHandler = (text, name) => {
+  localFormHandler = (text, name) => {
     this.setState({[name]: text});
   };
 
@@ -115,17 +115,17 @@ class EditCategoryScreen extends Component {
           <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
-          onChangeText={(text) => this.editCategoryFormHandler(text, 'name')}
-          placeholder={'Item Name'}
+          onChangeText={(text) => this.localFormHandler(text, 'name')}
+          placeholder={'Category Name'}
           value={this.state.name}
         />
         <TextInput
-          onChangeText={(text) => this.editCategoryFormHandler(text, 'description')}
-          placeholder={'Item Description'}
+          onChangeText={(text) => this.localFormHandler(text, 'description')}
+          placeholder={'Category Description'}
           value={this.state.description}
         />
         <TouchableOpacity
-        onPress={() => this.props.itemFormHandler(this.state, 'edit') }
+        onPress={() => this.props.categoryFormHandler(this.state, 'edit') }
         style={this.props.style.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>

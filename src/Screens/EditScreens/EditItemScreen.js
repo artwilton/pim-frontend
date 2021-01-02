@@ -53,7 +53,7 @@ class EditItemScreen extends Component {
   }
 
   // Local Form Handler
-  editItemFormHandler = (text, name) => {
+  localFormHandler = (text, name) => {
     this.setState({[name]: text});
   };
 
@@ -140,22 +140,22 @@ class EditItemScreen extends Component {
           <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'name')}
+          onChangeText={(text) => this.localFormHandler(text, 'name')}
           placeholder={'Item Name'}
           value={this.state.name}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'description')}
+          onChangeText={(text) => this.localFormHandler(text, 'description')}
           placeholder={'Item Description'}
           value={this.state.description}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'notes')}
+          onChangeText={(text) => this.localFormHandler(text, 'notes')}
           placeholder={'Item Notes (optional)'}
           value={this.state.notes}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'barcode')}
+          onChangeText={(text) => this.localFormHandler(text, 'barcode')}
           placeholder={'Barcode (optional)'}
           value={this.state.barcode}
         />

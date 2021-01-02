@@ -63,6 +63,7 @@ class App extends Component {
     containers: [],
     categories: [],
     filteredItems: [],
+    filteredCategories: [],
     user_profile_photo: '',
     searchValue: '',
     searchType: 'Name'
@@ -197,7 +198,32 @@ class App extends Component {
     await navigate('ItemShow', {clickedObj: this.state.items.find(item => item.id === itemObj.id)});
   }
 
-  removeItem = async (item, inputType) => {
+  removeHandler = (obj, inputType) => {
+
+    switch(inputType) {
+      case 'Item':
+        this.removeItem(obj);
+        break;
+      case 'Category':
+        this.removeCategory(obj);
+        break;
+      case 'Container':
+        this.removeContainer(obj);
+        break;
+      case 'Type':
+        this.removeType(obj);
+        break;
+      case 'User':
+        this.removeUser(obj);
+        break;
+      default:
+        console.log('Error: invalid input type')
+    } 
+
+    
+  }
+
+  removeItem = async (item) => {
 
     // try {
       let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_items/${item.id}`, {
@@ -210,7 +236,7 @@ class App extends Component {
     // }
     await this.setState({ items: data.items });
     await this.setState({ filteredItems: this.state.items });
-    await navigate(`${inputType}Index`);
+    await navigate(`ItemIndex`);
 
   }
 
@@ -218,7 +244,7 @@ class App extends Component {
 
   categoryFormHandler = (categoryObj, type) => {
 
-    let { id, name, description, photo } = categoryObj
+    let { name, description, photo } = categoryObj
 
     console.log('categoryObj', categoryObj)
 
@@ -245,59 +271,67 @@ class App extends Component {
 
   };
 
-  
+  addCategoryFetch = async (formData) => {
 
-  // Routing
+    // try {
+     let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/categories/new`, {
+       method: "POST",
+       body: formData
+     });
+     let data = await resp.json();
+   // } catch(error) {
+   //   console.log('upload error', error)
+   // }
 
-  setClickedObj = (obj = {}) => {
-    this.setState({clickedObj: obj}, ()=> console.log('clickedObj', this.state.clickedObj.name))
+   console.log('category add response', data)
+
+    this.setState({
+      categories: [...this.state.categories, data],
+      filteredCategories: [...this.state.categories, data]
+      },
+      ()=> navigate('CategoryIndex')
+    )
+   
+}
+
+  editCategoryFetch = async (formData, categoryObj) => {
+
+  // try {
+    let resp = await fetch(`http://10.0.2.2:3000/api/v1/categories/${categoryObj.id}/`, {
+      method: 'PUT',
+      body: formData
+    });
+    let data = await resp.json();
+  // } catch(error) {
+  //   console.log('upload error', error)
+  // }
+  const filteredObj = {description: data.description, id: data.id, name: data.name, photo: {uri: data.photo ? data.photo.uri : null}}
+
+  let indexOfCategory = this.state.categories.findIndex(category => category.id === data.id)
+  let updatedCategories = this.state.categories
+  updatedCategories[indexOfCategory] = filteredObj
+
+  this.setState({categories: updatedCategories}, () => navigate('CategoryShow', {clickedObj: filteredObj}))
+  ;
+  // this.setState({ categories: data.items });
+  // this.setState({ filteredItems: this.state.items });
   }
 
-  tempRouting = () => {
+  removeCategory = async (category) => {
 
-    let route = ''
+    // try {
+      let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_categories/${category.id}`, {
+        method: "DELETE"
+      })
 
-    switch(this.state.currentPage) {
-      
-      case 'ItemIndex':
-        route = <IndexScreen
-        setSearchType={this.setSearchType}
-        inputType={'Item'}
-        searchValue={this.state.searchValue}
-        searchHandler={this.searchHandler}
-        items={this.filteredItems()}
-        setClickedObj={this.setClickedObj}
-        style={styles}></IndexScreen>
-        break;
-      case 'ContainerIndex':
-        route = <IndexScreen inputType={'Container'} containers={this.state.containers} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
-        break;
-      case 'CategoryIndex':
-        route = <IndexScreen inputType={'Category'}  categories={this.state.categories} setClickedObj={this.setClickedObj} style={styles}></IndexScreen>
-        break;
-      case 'ItemShow':
-        route = <ShowScreen removeItem={this.removeItem} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
-        break;
-      case 'ItemEdit':
-        route = <EditScreen itemFormHandler={this.itemFormHandler} inputType={'Item'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} containers={this.state.containers} categories={this.state.categories} style={styles}></EditScreen>
-        break;
-      case 'ContainerShow':
-        route = <ShowScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
-        break;
-      case 'ContainerEdit':
-        route = <EditScreen inputType={'Container'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></EditScreen>
-        break;
-      case 'CategoryShow':
-        route = <ShowScreen inputType={'Category'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></ShowScreen>
-        break;
-      case 'CategoryEdit':
-        route = <EditScreen inputType={'Category'} clickedObj={this.state.clickedObj} setClickedObj={this.setClickedObj} style={styles}></EditScreen>
-        break;
-      default:
-        route = <LoginSignupScreen style={styles} loginAuthHandler={this.loginAuthHandler} signupHandler={this.signupHandler}/>
-    }
+      let data = await resp.json();
+    // } catch(error) {
+    //   console.log('delete error', error)
+    // }
+    await this.setState({ categories: data.categories });
+    await this.setState({ filteredcategories: this.state.categories });
+    await navigate(`CategoryIndex`);
 
-    return route
   }
 
   // Search
@@ -319,6 +353,7 @@ class App extends Component {
     this.setState({searchType: searchType}, () => console.log(this.state.searchType))
   }
 
+  // Nav Tab Screens
   HomeTabs = () => {
     return (
       <Tab.Navigator>
@@ -334,6 +369,7 @@ class App extends Component {
     );
   }
 
+  // Nav Stack Screens and Render
   render () {
       return (
         <NavigationContainer ref={navigationRef}>
@@ -366,15 +402,15 @@ class App extends Component {
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Item'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Item'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="ContainerShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Container'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Container'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="CategoryShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeItem={this.removeItem} inputType={'Category'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Category'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="AddItem">
@@ -382,11 +418,11 @@ class App extends Component {
                 </Stack.Screen>
 
                 <Stack.Screen name="AddContainer">
-                  {props => <AddContainerScreen {...props} itemFormHandler={this.itemFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
+                  {props => <AddContainerScreen {...props} containerFormHandler={this.containerFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
                 </Stack.Screen>
 
                 <Stack.Screen name="AddCategory">
-                  {props => <AddCategoryScreen {...props} itemFormHandler={this.itemFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddCategoryScreen> }
+                  {props => <AddCategoryScreen {...props} categoryFormHandler={this.categoryFormHandler} style={styles} ></AddCategoryScreen> }
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemEdit">
@@ -396,7 +432,7 @@ class App extends Component {
                 <Stack.Screen name="ContainerEdit" component={EditContainerScreen} />
 
                 <Stack.Screen name="CategoryEdit">
-                    {props => <EditCategoryScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Category'} style={styles}></EditCategoryScreen>}
+                    {props => <EditCategoryScreen {...props} categoryFormHandler={this.categoryFormHandler} inputType={'Category'} style={styles}></EditCategoryScreen>}
                 </Stack.Screen>
 
               </>

@@ -61,7 +61,7 @@ class ShowScreen extends React.Component {
             <TouchableOpacity
               style={this.props.style.button}
               onPress={
-                async () => { await this.props.removeItem(clickedObj, this.props.inputType)}
+                async () => { await this.props.removeHandler(clickedObj, this.props.inputType)}
                }>
               <Text>Delete {this.props.inputType}</Text>
             </TouchableOpacity>
