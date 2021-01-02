@@ -118,7 +118,6 @@ class App extends Component {
 
   }
 
-  
   formDataNullCheck = (formData, name, value) => {
     
     if ((name !== 'photo' && value ) || (name === 'photo' && value.type)) {
@@ -128,6 +127,7 @@ class App extends Component {
     }
   }
 
+  // Item Fetch and Form Handler Functions
   itemFormHandler = (itemObj, type) => {
 
     let { id, name, description, notes, barcode, container, category, photo } = itemObj
@@ -213,6 +213,39 @@ class App extends Component {
     await navigate(`${inputType}Index`);
 
   }
+
+  // Category Fetch and Form Handler Functions
+
+  categoryFormHandler = (categoryObj, type) => {
+
+    let { id, name, description, photo } = categoryObj
+
+    console.log('categoryObj', categoryObj)
+
+    const formData = new FormData();
+ 
+    this.formDataNullCheck(formData, 'name', name);
+    this.formDataNullCheck(formData, 'description', description);
+    this.formDataNullCheck(formData, 'photo', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+    });
+
+    switch(type) {
+      case 'edit':
+        this.editCategoryFetch(formData, categoryObj);
+        break;
+      case 'add':
+        this.addCategoryFetch(formData, categoryObj);
+        break;
+      default:
+        console.log('Error: invalid form type')
+    } 
+
+  };
+
+  
 
   // Routing
 
@@ -314,7 +347,7 @@ class App extends Component {
                     headerTitle: getHeaderTitle(route),
                   })}
                 />
-                <Stack.Screen name="ItemIndex">
+                <Stack.Screen name="ItemIndex" options={{ title: 'Items' }}>
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
@@ -324,11 +357,11 @@ class App extends Component {
                   style={styles} /> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="ContainerIndex">
+                <Stack.Screen name="ContainerIndex" options={{ title: 'Containers' }}>
                   {props => <IndexScreen {...props} containers={this.state.containers} style={styles}></IndexScreen>}
                 </Stack.Screen>
 
-                <Stack.Screen name="CategoryIndex">
+                <Stack.Screen name="CategoryIndex" options={{ title: 'Categories' }}>
                   {props => <IndexScreen {...props} categories={this.state.categories} style={styles}></IndexScreen>}
                 </Stack.Screen>
                 
@@ -361,7 +394,11 @@ class App extends Component {
                 </Stack.Screen>
                 
                 <Stack.Screen name="ContainerEdit" component={EditContainerScreen} />
-                <Stack.Screen name="CategoryEdit" component={EditCategoryScreen} />
+
+                <Stack.Screen name="CategoryEdit">
+                    {props => <EditCategoryScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Category'} style={styles}></EditCategoryScreen>}
+                </Stack.Screen>
+
               </>
             ) : (
               <>

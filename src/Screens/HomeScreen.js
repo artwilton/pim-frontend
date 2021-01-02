@@ -19,14 +19,14 @@ function HomeScreen({ currentUserName, navigation, style }) {
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
                     <TouchableOpacity onPress={() => navigation.navigate('ItemIndex')} style={style.button}>
-                        <Text>All Items</Text>
+                        <Text>Items</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>
                         <Text>Shared</Text>
                     </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('ContainerIndex')} style={style.button}>
-                        <Text>All Containers</Text>
+                        <Text>Containers</Text>
                     </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('CategoryIndex')} style={style.button}>
-                        <Text>All Categories</Text>
+                        <Text>Categories</Text>
                     </TouchableOpacity>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
