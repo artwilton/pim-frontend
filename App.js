@@ -308,7 +308,7 @@ class App extends Component {
   const filteredObj = {description: data.description, id: data.id, name: data.name, photo: {uri: data.photo ? data.photo.uri : null}}
 
   let indexOfCategory = this.state.categories.findIndex(category => category.id === data.id)
-  let updatedCategories = this.state.categories
+  let updatedCategories = [...this.state.categories]
   updatedCategories[indexOfCategory] = filteredObj
 
   this.setState({categories: updatedCategories}, () => navigate('CategoryShow', {clickedObj: filteredObj}))
@@ -328,9 +328,11 @@ class App extends Component {
     // } catch(error) {
     //   console.log('delete error', error)
     // }
-    await this.setState({ categories: data.categories });
-    await this.setState({ filteredcategories: this.state.categories });
-    await navigate(`CategoryIndex`);
+
+    let updatedCategories = [...this.state.categories]
+    let indexOfCategory = this.state.categories.findIndex(oldCategory => oldCategory.id === category.id)
+    updatedCategories.splice(indexOfCategory, 1)
+    this.setState({ categories: updatedCategories, filteredCategories: updatedCategories }, ()=> navigate(`CategoryIndex`));
 
   }
 
