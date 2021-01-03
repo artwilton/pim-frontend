@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Footer from '../Components/Footer/Footer'
-
 class ScanScreen extends Component {
     render () {
         return (
@@ -21,9 +19,6 @@ class ScanScreen extends Component {
                     <Text>BODY</Text>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
-                <View>
-                    <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
-                </View>
             </View>
         )
     }

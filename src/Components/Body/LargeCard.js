@@ -4,19 +4,21 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { styles } from '../../Styles'
 
-class LargeCard extends Component {
-    render () {
-        return (
-            <View>
-                <TouchableOpacity onPress={() => this.props.buttonRouteHandler(this.props.routeName)} style={styles.button}>
-                    <Text>{this.props.title}</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+
+function LargeCard( props, {navigation} ) {
+
+    return (
+        <View>
+            <TouchableOpacity onPress={() => navigation.navigate(props.routeName)} style={styles.button}>
+                <Text>{props.title}</Text>
+            </TouchableOpacity>
+        </View>
+    )
+
 }
 
 export default LargeCard;

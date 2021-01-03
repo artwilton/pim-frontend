@@ -13,11 +13,11 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '80%',
   },
-  footerButton: {
+  largeButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#9D9F9F',
-    padding: 10,
+    backgroundColor: '#DDDDDD',
+    padding: 30,
     width: '80%',
   },
   fullSizePhoto: {

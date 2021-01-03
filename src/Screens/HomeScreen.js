@@ -6,31 +6,32 @@ import {
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
-
-import Footer from '../Components/Footer/Footer'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { LargeCard } from '../Components/Body';
 
-class HomeScreen extends Component {
-    render () {
-        return (
-            <View>
+function HomeScreen({ currentUserName, navigation, style }) {
+    return (
+        <View>
                 <Text>
-                    {`Hi ${this.props.currentUserName}`}
+                    {`Hi ${currentUserName}`}
                 </Text>
                 <Text>--------------------------------------------------------------------------------------</Text>
                 <View>
-                    <LargeCard title={'All Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllItems'}></LargeCard>
-                    <LargeCard title={'Shared Items'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'shared'}></LargeCard>
-                    <LargeCard title={'Containers'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllContainers'}></LargeCard>
-                    <LargeCard title={'Categories'} buttonRouteHandler={this.props.buttonRouteHandler} routeName={'AllCategories'}></LargeCard>
+                    <TouchableOpacity onPress={() => navigation.navigate('ItemIndex')} style={style.button}>
+                        <Text>Items</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>
+                        <Text>Shared</Text>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('ContainerIndex')} style={style.button}>
+                        <Text>Containers</Text>
+                    </TouchableOpacity><TouchableOpacity onPress={() => navigation.navigate('CategoryIndex')} style={style.button}>
+                        <Text>Categories</Text>
+                    </TouchableOpacity>
                 </View>
                 <Text>--------------------------------------------------------------------------------------</Text>
-                <View>
-                    <Footer buttonRouteHandler={this.props.buttonRouteHandler}></Footer>
-                </View>
             </View>
-        )
-    }
+    )
 }
 
 export default HomeScreen;
