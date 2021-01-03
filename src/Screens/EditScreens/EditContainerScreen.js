@@ -99,19 +99,19 @@ class EditContainerScreen extends Component {
     return (
       <View>
         <Image
-          style={this.props.styles.fullSizePhoto}
+          style={this.props.style.fullSizePhoto}
           source={{
             uri: `http://10.0.2.2:3000${this.state.photo}`,
           }}
         />
         <TouchableOpacity
           onPress={() => this.cameraTakePhoto()}
-          style={this.props.styles.button}>
+          style={this.props.style.button}>
           <Text>Take New Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.uploadPhoto()}
-          style={this.props.styles.button}>
+          style={this.props.style.button}>
           <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
@@ -156,7 +156,7 @@ class EditContainerScreen extends Component {
         </Picker>
         <TouchableOpacity
           onPress={() => this.props.editItem(this.state), navigation.goBack()}
-          style={this.props.styles.button}>
+          style={this.props.style.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>
       </View>

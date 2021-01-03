@@ -122,10 +122,12 @@ class App extends Component {
   }
 
   formDataNullCheck = (formData, name, value) => {
+
+    console.log('formData, name, value', formData, name, value)
     
-    if ((name !== 'photo' && value ) || (name === 'photo' && value.type)) {
+    if ((!name.match('photo') && value ) || (!!name.match('photo') && value.type)) {
       formData.append(name, value);
-    } else if (name !== 'photo' && !value ) {
+    } else if (!name.match('photo') && !value ) {
       formData.append(name, '');
     }
   }
@@ -139,13 +141,13 @@ class App extends Component {
 
     const formData = new FormData();
  
-    this.formDataNullCheck(formData, 'name', name);
-    this.formDataNullCheck(formData, 'description', description);
-    this.formDataNullCheck(formData, 'notes', notes);
-    this.formDataNullCheck(formData, 'barcode', barcode);
-    this.formDataNullCheck(formData, 'container_id', container.id);
-    this.formDataNullCheck(formData, 'category_id', category.id);
-    this.formDataNullCheck(formData, 'photo', {
+    this.formDataNullCheck(formData, 'item[name]', name);
+    this.formDataNullCheck(formData, 'item[description]', description);
+    this.formDataNullCheck(formData, 'item[notes]', notes);
+    this.formDataNullCheck(formData, 'item[barcode]', barcode);
+    this.formDataNullCheck(formData, 'item[container_id]', container.id);
+    this.formDataNullCheck(formData, 'item[category_id]', category.id);
+    this.formDataNullCheck(formData, 'item[photo]', {
       name: photo.fileName,
       type: photo.type,
       uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
@@ -252,9 +254,9 @@ class App extends Component {
 
     const formData = new FormData();
  
-    this.formDataNullCheck(formData, 'name', name);
-    this.formDataNullCheck(formData, 'description', description);
-    this.formDataNullCheck(formData, 'photo', {
+    this.formDataNullCheck(formData, 'category[name]', name);
+    this.formDataNullCheck(formData, 'category[description]', description);
+    this.formDataNullCheck(formData, 'category[photo]', {
       name: photo.fileName,
       type: photo.type,
       uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
@@ -350,11 +352,11 @@ class App extends Component {
     this.formDataNullCheck(formData, 'container[percent_used]', percent_used);
     this.formDataNullCheck(formData, 'container[barcode]', barcode);
     this.formDataNullCheck(formData, 'container[type_id]', type.id);
-    // this.formDataNullCheck(formData, 'container[photo]', {
-    //   name: photo.fileName,
-    //   type: photo.type,
-    //   uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
-    // });
+    this.formDataNullCheck(formData, 'container[photo]', {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+    });
 
     switch(fetchType) {
       case 'edit':
