@@ -148,7 +148,7 @@ class EditContainerScreen extends Component {
         <TextInput
           onChangeText={(text) => this.localFormHandler(text, 'percent_used')}
           placeholder={'Percent Used'}
-          value={this.state.percent_used.toString()}
+          value={this.state.percent_used ? this.state.percent_used.toString() : null}
         />
         <TextInput
           onChangeText={(text) => this.localFormHandler(text, 'barcode')}

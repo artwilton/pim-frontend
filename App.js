@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { navigationRef, navigate } from './RootNavigation';
 
@@ -44,6 +44,8 @@ function getHeaderTitle(route) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
 
   switch (routeName) {
+    case 'Home':
+      return 'Home';
     case 'Scan':
       return 'Scan';
     case 'Add':
@@ -479,13 +481,13 @@ class App extends Component {
           <Stack.Navigator initialRouteName="Login">
             {this.state.currentUserId !== '' ? (
               <>
-                <Stack.Screen name="Home"
+                <Stack.Screen name="HomeScreen"
                   component={this.HomeTabs}
                   options={({ route }) => ({
                     headerTitle: getHeaderTitle(route),
                   })}
                 />
-                <Stack.Screen name="ItemIndex" options={{ title: 'Items' }}>
+                <Stack.Screen name="ItemIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Items'}}>
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
@@ -495,11 +497,11 @@ class App extends Component {
                   style={styles} /> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="ContainerIndex" options={{ title: 'Containers' }}>
+                <Stack.Screen name="ContainerIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Containers'}}>
                   {props => <IndexScreen {...props} containers={this.state.containers} style={styles}></IndexScreen>}
                 </Stack.Screen>
 
-                <Stack.Screen name="CategoryIndex" options={{ title: 'Categories' }}>
+                <Stack.Screen name="CategoryIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Categories'}}>
                   {props => <IndexScreen {...props} categories={this.state.categories} style={styles}></IndexScreen>}
                 </Stack.Screen>
                 
@@ -523,19 +525,19 @@ class App extends Component {
                   {props => <AddContainerScreen {...props} containerFormHandler={this.containerFormHandler} types={this.state.types} style={styles} ></AddContainerScreen> }
                 </Stack.Screen>
 
-                <Stack.Screen name="AddCategory">
+                <Stack.Screen name="AddCategory" >
                   {props => <AddCategoryScreen {...props} categoryFormHandler={this.categoryFormHandler} style={styles} ></AddCategoryScreen> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="ItemEdit">
+                <Stack.Screen name="ItemEdit" options={{ title: 'Edit Item' }}>
                     {props => <EditItemScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
                 </Stack.Screen>
 
-                <Stack.Screen name="ContainerEdit">
+                <Stack.Screen name="ContainerEdit" options={{ title: 'Edit Container' }}>
                     {props => <EditContainerScreen {...props} containerFormHandler={this.containerFormHandler} types={this.state.types} inputType={'Container'} style={styles}></EditContainerScreen>}
                 </Stack.Screen>
 
-                <Stack.Screen name="CategoryEdit">
+                <Stack.Screen name="CategoryEdit" options={{ title: 'Edit Category' }}>
                     {props => <EditCategoryScreen {...props} categoryFormHandler={this.categoryFormHandler} inputType={'Category'} style={styles}></EditCategoryScreen>}
                 </Stack.Screen>
 

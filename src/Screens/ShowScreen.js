@@ -1,9 +1,12 @@
 import React, {Component, useEffect} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 
-
 class ShowScreen extends React.Component {
-
+  
+  componentDidMount() {
+    const { clickedObj } = this.props.route.params;
+    this.props.navigation.setOptions({ title: clickedObj.name })
+  }
   componentWillUnmount() {
     this.props.searchHandler('')
   }
@@ -20,8 +23,9 @@ class ShowScreen extends React.Component {
   }
   
   render () {
-    const { clickedObj } = this.props.route.params;
 
+    const { clickedObj } = this.props.route.params;
+    
     return (
       
       <ScrollView>
