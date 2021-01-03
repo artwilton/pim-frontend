@@ -62,8 +62,10 @@ class App extends Component {
     items: [],
     containers: [],
     categories: [],
+    types: [],
     filteredItems: [],
     filteredCategories: [],
+    filteredContainers: [],
     user_profile_photo: '',
     searchValue: '',
     searchType: 'Name'
@@ -114,8 +116,8 @@ class App extends Component {
       `http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/items`
     );
     let userData = await userResponse.json();
-    let { items, containers, categories, user_profile_photo} = userData
-    this.setState({ items, containers, categories, filteredItems: items, user_profile_photo });
+    let { items, containers, categories, types, user_profile_photo} = userData
+    this.setState({ items, containers, categories, types, filteredItems: items, user_profile_photo });
 
   }
 
@@ -129,7 +131,7 @@ class App extends Component {
   }
 
   // Item Fetch and Form Handler Functions
-  itemFormHandler = (itemObj, type) => {
+  itemFormHandler = (itemObj, fetchType) => {
 
     let { id, name, description, notes, barcode, container, category, photo } = itemObj
 
@@ -149,7 +151,7 @@ class App extends Component {
       uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
     });
 
-    switch(type) {
+    switch(fetchType) {
       case 'edit':
         this.editItemFetch(formData, itemObj);
         break;
@@ -157,7 +159,7 @@ class App extends Component {
         this.addItemFetch(formData, itemObj);
         break;
       default:
-        console.log('Error: invalid form type')
+        console.log('Error: invalid fetchType')
     } 
 
   };
@@ -242,7 +244,7 @@ class App extends Component {
 
   // Category Fetch and Form Handler Functions
 
-  categoryFormHandler = (categoryObj, type) => {
+  categoryFormHandler = (categoryObj, fetchType) => {
 
     let { name, description, photo } = categoryObj
 
@@ -258,7 +260,7 @@ class App extends Component {
       uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
     });
 
-    switch(type) {
+    switch(fetchType) {
       case 'edit':
         this.editCategoryFetch(formData, categoryObj);
         break;
@@ -266,7 +268,7 @@ class App extends Component {
         this.addCategoryFetch(formData, categoryObj);
         break;
       default:
-        console.log('Error: invalid form type')
+        console.log('Error: invalid fetchType')
     } 
 
   };
@@ -311,10 +313,8 @@ class App extends Component {
   let updatedCategories = [...this.state.categories]
   updatedCategories[indexOfCategory] = filteredObj
 
-  this.setState({categories: updatedCategories}, () => navigate('CategoryShow', {clickedObj: filteredObj}))
-  ;
-  // this.setState({ categories: data.items });
-  // this.setState({ filteredItems: this.state.items });
+  this.setState({categories: updatedCategories, filteredCategories: updatedCategories}, () => navigate('CategoryShow', {clickedObj: filteredObj}))  ;
+
   }
 
   removeCategory = async (category) => {
@@ -333,6 +333,104 @@ class App extends Component {
     let indexOfCategory = this.state.categories.findIndex(oldCategory => oldCategory.id === category.id)
     updatedCategories.splice(indexOfCategory, 1)
     this.setState({ categories: updatedCategories, filteredCategories: updatedCategories }, ()=> navigate(`CategoryIndex`));
+
+  }
+
+  containerFormHandler = (containerObj, fetchType) => {
+
+    let { name, description, notes, percent_used, barcode, type, photo } = containerObj
+
+    console.log('containerObj', containerObj)
+
+    const formData = new FormData();
+ 
+    this.formDataNullCheck(formData, 'container[name]', name);
+    this.formDataNullCheck(formData, 'container[description]', description);
+    this.formDataNullCheck(formData, 'container[notes]', notes);
+    this.formDataNullCheck(formData, 'container[percent_used]', percent_used);
+    this.formDataNullCheck(formData, 'container[barcode]', barcode);
+    this.formDataNullCheck(formData, 'container[type_id]', type.id);
+    // this.formDataNullCheck(formData, 'container[photo]', {
+    //   name: photo.fileName,
+    //   type: photo.type,
+    //   uri: Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+    // });
+
+    switch(fetchType) {
+      case 'edit':
+        this.editContainerFetch(formData, containerObj);
+        break;
+      case 'add':
+        this.addContainerFetch(formData, containerObj);
+        break;
+      default:
+        console.log('Error: invalid fetchType')
+    } 
+
+  };
+
+  // Container Fetch and Form Handler Functions
+  
+  addContainerFetch = async (formData) => {
+
+    // try {
+     let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/containers/new`, {
+       method: "POST",
+       body: formData
+     });
+     let data = await resp.json();
+   // } catch(error) {
+   //   console.log('upload error', error)
+   // }
+
+   console.log('container add response', data)
+
+    this.setState({
+      containers: [...this.state.containers, data],
+      filteredContainers: [...this.state.containers, data]
+      },
+      ()=> navigate('ContainerIndex')
+    )
+   
+}
+
+  editContainerFetch = async (formData, containerObj) => {
+
+  // try {
+    let resp = await fetch(`http://10.0.2.2:3000/api/v1/containers/${containerObj.id}/`, {
+      method: 'PUT',
+      body: formData
+    });
+    let data = await resp.json();
+  // } catch(error) {
+  //   console.log('upload error', error)
+  // }
+  const filteredObj = {id: data.id, name: data.name, description: data.description, notes: data.notes, percent_used: data.percent_used, barcode: data.barcode, type: data.type, photo: {uri: data.photo ? data.photo.uri : null}}
+
+  let indexOfContainer = this.state.containers.findIndex(container => container.id === data.id)
+  let updatedContainers = [...this.state.containers]
+  updatedContainers[indexOfContainer] = filteredObj
+
+  this.setState({containers: updatedContainers, filteredContainers: updatedContainers}, () => navigate('ContainerShow', {clickedObj: filteredObj}));
+
+  }
+
+  removeContainer = async (container) => {
+
+    // try {
+      let resp = await fetch(`http://10.0.2.2:3000/api/v1/users/${this.state.currentUserId}/user_containers/${container.id}`, {
+        method: "DELETE"
+      })
+
+      let data = await resp.json();
+    // } catch(error) {
+    //   console.log('delete error', error)
+    // }
+
+    let updatedContainers = [...this.state.containers]
+    let indexOfContainer = this.state.containers.findIndex(oldContainer => oldContainer.id === container.id)
+    updatedContainers.splice(indexOfContainer, 1)
+    this.setState({ containers: updatedContainers, filteredContainers: updatedContainers }, ()=> navigate(`ContainerIndex`));
 
   }
 
@@ -420,7 +518,7 @@ class App extends Component {
                 </Stack.Screen>
 
                 <Stack.Screen name="AddContainer">
-                  {props => <AddContainerScreen {...props} containerFormHandler={this.containerFormHandler} containers={this.state.containers} categories={this.state.categories} style={styles} ></AddContainerScreen> }
+                  {props => <AddContainerScreen {...props} containerFormHandler={this.containerFormHandler} types={this.state.types} style={styles} ></AddContainerScreen> }
                 </Stack.Screen>
 
                 <Stack.Screen name="AddCategory">
@@ -430,8 +528,10 @@ class App extends Component {
                 <Stack.Screen name="ItemEdit">
                     {props => <EditItemScreen {...props} itemFormHandler={this.itemFormHandler} inputType={'Item'} containers={this.state.containers} categories={this.state.categories} style={styles}></EditItemScreen>}
                 </Stack.Screen>
-                
-                <Stack.Screen name="ContainerEdit" component={EditContainerScreen} />
+
+                <Stack.Screen name="ContainerEdit">
+                    {props => <EditContainerScreen {...props} containerFormHandler={this.containerFormHandler} inputType={'Container'} style={styles}></EditContainerScreen>}
+                </Stack.Screen>
 
                 <Stack.Screen name="CategoryEdit">
                     {props => <EditCategoryScreen {...props} categoryFormHandler={this.categoryFormHandler} inputType={'Category'} style={styles}></EditCategoryScreen>}

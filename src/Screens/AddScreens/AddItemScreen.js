@@ -46,7 +46,7 @@ class NewItemForm extends Component {
     );
   };
 
-  newItemFormHandler = (text, name) => {
+  localFormHandler = (text, name) => {
     this.setState({[name]: text});
   };
 
@@ -90,22 +90,22 @@ class NewItemForm extends Component {
           <Text>Upload Item Photo</Text>
         </TouchableOpacity>
         <TextInput
-          onChangeText={(text) => this.newItemFormHandler(text, 'name')}
+          onChangeText={(text) => this.localFormHandler(text, 'name')}
           placeholder={'Item Name'}
           value={this.state.name}
         />
         <TextInput
-          onChangeText={(text) => this.newItemFormHandler(text, 'description')}
-          placeholder={'Item Description'}
+          onChangeText={(text) => this.localFormHandler(text, 'description')}
+          placeholder={'Description'}
           value={this.state.description}
         />
         <TextInput
-          onChangeText={(text) => this.newItemFormHandler(text, 'notes')}
-          placeholder={'Item Notes (optional)'}
+          onChangeText={(text) => this.localFormHandler(text, 'notes')}
+          placeholder={'Notes (optional)'}
           value={this.state.notes}
         />
         <TextInput
-          onChangeText={(text) => this.newItemFormHandler(text, 'barcode')}
+          onChangeText={(text) => this.localFormHandler(text, 'barcode')}
           placeholder={'Barcode (optional)'}
           value={this.state.barcode}
         />

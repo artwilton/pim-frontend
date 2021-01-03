@@ -35,6 +35,7 @@ class ShowScreen extends React.Component {
     
             {this.props.inputType === 'Item' ? (
                 <>
+                <Text> Notes: {clickedObj.notes} </Text>
                 <Text> BarCode: {clickedObj.barcode} </Text>
                 <Text> Container: {clickedObj.container.name} </Text>
                 <Text> Category: {clickedObj.category.name} </Text>
@@ -43,6 +44,7 @@ class ShowScreen extends React.Component {
     
             {this.props.inputType === 'Container' ? (
               <>
+                <Text> Notes: {clickedObj.notes} </Text>
                 <Text> Type: {clickedObj.type.name} </Text>
                 <Text> BarCode: {clickedObj.barcode} </Text>
               </>

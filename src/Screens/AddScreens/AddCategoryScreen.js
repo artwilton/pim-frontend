@@ -76,7 +76,7 @@ class NewCategoryForm extends Component {
         />
         <TextInput
           onChangeText={(text) => this.localFormHandler(text, 'description')}
-          placeholder={'Category Description'}
+          placeholder={'Description'}
           value={this.state.description}
         />
         <TouchableOpacity onPress={() => this.props.categoryFormHandler(this.state, 'add')} style={this.props.style.button}>
