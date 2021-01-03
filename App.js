@@ -326,7 +326,7 @@ class App extends Component {
         method: "DELETE"
       })
 
-      let data = await resp.json();
+      // let data = await resp.json();
     // } catch(error) {
     //   console.log('delete error', error)
     // }
@@ -424,7 +424,7 @@ class App extends Component {
         method: "DELETE"
       })
 
-      let data = await resp.json();
+      // let data = await resp.json();
     // } catch(error) {
     //   console.log('delete error', error)
     // }
@@ -532,7 +532,7 @@ class App extends Component {
                 </Stack.Screen>
 
                 <Stack.Screen name="ContainerEdit">
-                    {props => <EditContainerScreen {...props} containerFormHandler={this.containerFormHandler} inputType={'Container'} style={styles}></EditContainerScreen>}
+                    {props => <EditContainerScreen {...props} containerFormHandler={this.containerFormHandler} types={this.state.types} inputType={'Container'} style={styles}></EditContainerScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="CategoryEdit">

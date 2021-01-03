@@ -45,8 +45,9 @@ class ShowScreen extends React.Component {
             {this.props.inputType === 'Container' ? (
               <>
                 <Text> Notes: {clickedObj.notes} </Text>
-                <Text> Type: {clickedObj.type.name} </Text>
+                <Text> Percent Used: {clickedObj.percent_used} </Text>
                 <Text> BarCode: {clickedObj.barcode} </Text>
+                <Text> Type: {clickedObj.type.name} </Text>
               </>
             ) : null}
     

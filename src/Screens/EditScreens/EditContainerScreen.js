@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   View,
-  Keyboard,
+  ScrollView,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -13,43 +13,49 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 class EditContainerScreen extends Component {
   state = {
-    id: '',
     name: '',
     description: '',
     notes: '',
+    percent_used: '',
     barcode: '',
-    selected_container: {},
-    selected_category: {},
-    photo: '',
-    newPhoto: {},
+    type: {},
+    photo: {},
+    originalPhoto: {}
   };
 
   componentDidMount() {
-    console.log('clicked obj', this.props.clickedObj);
+    console.log('clicked obj', this.props.route.params.clickedObj);
     let {
       id,
       name,
       description,
       notes,
+      percent_used,
       barcode,
-      container,
-      category,
-      photo,
-    } = this.props.clickedObj;
+      type,
+      photo
+    } = this.props.route.params.clickedObj;
     this.setState(
       {
         id,
         name,
         description,
         notes,
+        percent_used,
         barcode,
-        selected_container: container,
-        selected_category: category,
-        photo,
+        type,
+        photo
       },
       () => console.log('mounted state', this.state),
     );
   }
+
+   // Local Form Handler
+  localFormHandler = (text, name) => {
+    this.setState({[name]: text});
+  };
+
+  // Camera and Upload Functions
 
   cameraTakePhoto = () => {
     return launchCamera(
@@ -59,9 +65,7 @@ class EditContainerScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
-        this.setState({newPhoto: response});
-      },
+      this.addImageCheck
     );
   };
 
@@ -73,36 +77,48 @@ class EditContainerScreen extends Component {
         maxHeight: 200,
         maxWidth: 200,
       },
-      (response) => {
-        this.setState({newPhoto: response});
-      },
+      this.addImageCheck
     );
   };
 
-  editItemFormHandler = (text, name) => {
-    this.setState({[name]: text});
-  };
+  // Handle setting the correct photo and originalPhoto state
+  addImageCheck = (response) => {
+    const orignalPhotoObj = {
+      uri: (this.state.photo.uri && this.state.photo.uri.startsWith('/')) ?
+        this.state.photo.uri
+      :
+        '../../../src/assets/img/default_item_photo.png'
+    }
+    this.setState({photo: response, originalPhoto: orignalPhotoObj});
+  }
 
-  renderContainerValues = () => {
-    return this.props.containers.map((obj) => (
-      <Picker.Item key={obj.id} label={obj.name} value={obj} />
-    ));
-  };
+  // Handle correct source for Image component
+  imageSourceCheck = () => {
+    let imageSource = {}
 
-  renderCategoryValues = () => {
-    return this.props.categories.map((obj) => (
+    if (this.state.originalPhoto.uri) {
+      imageSource = {uri: this.state.photo.uri}
+    } else if (this.state.photo.uri) {
+      imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
+    } else {
+      imageSource = require('../../../src/assets/img/default_item_photo.png')
+    }
+    
+    return imageSource
+  }
+
+  renderTypeValues = () => {
+    return this.props.types.map((obj) => (
       <Picker.Item key={obj.id} label={obj.name} value={obj} />
-    ));
-  };
+  ));
+  }
 
   render() {
     return (
-      <View>
+      <ScrollView>
         <Image
           style={this.props.style.fullSizePhoto}
-          source={{
-            uri: `http://10.0.2.2:3000${this.state.photo}`,
-          }}
+          source={this.imageSourceCheck()}
         />
         <TouchableOpacity
           onPress={() => this.cameraTakePhoto()}
@@ -115,51 +131,45 @@ class EditContainerScreen extends Component {
           <Text>Upload Photo</Text>
         </TouchableOpacity>
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'name')}
-          placeholder={'Item Name'}
+          onChangeText={(text) => this.localFormHandler(text, 'name')}
+          placeholder={'Container Name'}
           value={this.state.name}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'description')}
-          placeholder={'Item Description'}
+          onChangeText={(text) => this.localFormHandler(text, 'description')}
+          placeholder={'Description'}
           value={this.state.description}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'notes')}
-          placeholder={'Item Notes (optional)'}
+          onChangeText={(text) => this.localFormHandler(text, 'notes')}
+          placeholder={'Notes (optional)'}
           value={this.state.notes}
         />
         <TextInput
-          onChangeText={(text) => this.editItemFormHandler(text, 'barcode')}
+          onChangeText={(text) => this.localFormHandler(text, 'percent_used')}
+          placeholder={'Percent Used'}
+          value={this.state.percent_used.toString()}
+        />
+        <TextInput
+          onChangeText={(text) => this.localFormHandler(text, 'barcode')}
           placeholder={'Barcode (optional)'}
           value={this.state.barcode}
         />
-        <Text> Select Container: </Text>
+        <Text> Select Type: </Text>
         <Picker
-          selectedValue={this.state.selected_container}
+          selectedValue={this.state.type}
           style={{height: 50, width: 300}}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({selected_container: itemValue}, () =>
-              console.log('containers', this.state.selected_container),
-            )
+            this.setState({type: itemValue})
           }>
-          {this.renderContainerValues()}
-        </Picker>
-        <Text> Select Category: </Text>
-        <Picker
-          selectedValue={this.state.selected_category}
-          style={{height: 50, width: 300}}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({selected_category: itemValue})
-          }>
-          {this.renderCategoryValues()}
+          {this.renderTypeValues()}
         </Picker>
         <TouchableOpacity
-          onPress={() => this.props.editItem(this.state), navigation.goBack()}
-          style={this.props.style.button}>
+        onPress={() => this.props.containerFormHandler(this.state, 'edit') }
+        style={this.props.style.button}>
           <Text>Save Changes</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 }
