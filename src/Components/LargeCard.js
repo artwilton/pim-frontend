@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { styles } from '../../Styles'
 
 
 function LargeCard( props, {navigation} ) {

@@ -7,9 +7,9 @@ class ShowScreen extends React.Component {
     const { clickedObj } = this.props.route.params;
     this.props.navigation.setOptions({ title: clickedObj.name })
   }
-  componentWillUnmount() {
-    this.props.searchHandler('')
-  }
+  // componentWillUnmount() {
+  //   this.props.searchHandler('')
+  // }
   
   imageSourceCheck = (clickedObj) => {
     let imageSource = {}

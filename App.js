@@ -103,7 +103,6 @@ class App extends Component {
       .then((data) => {
         this.setCurrentUser(data)
       });
-      this.setState({currentPage: 'Home'})
   };
 
   setCurrentUser = user => {
@@ -119,8 +118,12 @@ class App extends Component {
     );
     let userData = await userResponse.json();
     let { items, containers, categories, types, user_profile_photo} = userData
-    this.setState({ items, containers, categories, types, filteredItems: items, user_profile_photo });
+    this.setState({ items, containers, categories, types, filteredItems: items, filteredContainers: containers, filteredCategories: categories, user_profile_photo },()=> navigate('Home'));
 
+  }
+
+  logoutHandler = () => {
+    this.setState({currentUserId: ''})
   }
 
   formDataNullCheck = (formData, name, value) => {
@@ -453,6 +456,18 @@ class App extends Component {
     )
   }
 
+  filteredContainers = () => {
+    return (
+      this.state.containers.filter(container => container.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+    )
+  }
+
+  filteredCategories = () => {
+    return (
+      this.state.categories.filter(category => category.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+    )
+  }
+
   setSearchType = searchType => {
     this.setState({searchType: searchType}, () => console.log(this.state.searchType))
   }
@@ -462,10 +477,11 @@ class App extends Component {
     return (
       <Tab.Navigator>
         <Tab.Screen name="Home">
-          {props => <HomeScreen {...props} style={styles} currentUserName={this.state.currentUserName}/>}
+          {props => <HomeScreen {...props} items={this.state.items} style={styles} currentUserName={this.state.currentUserName} logoutHandler={this.logoutHandler}/>}
         </Tab.Screen>
-        <Tab.Screen name="Scan" component={ScanScreen} />
-        
+        <Tab.Screen name="Scan">
+          {props => <ScanScreen {...props} items={this.state.items} containers={this.state.containers} />}
+        </Tab.Screen>
         <Tab.Screen name="Add">
           {props => <AddScreenMain {...props} style={styles}/>}
         </Tab.Screen>
@@ -487,7 +503,7 @@ class App extends Component {
                     headerTitle: getHeaderTitle(route),
                   })}
                 />
-                <Stack.Screen name="ItemIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Items'}}>
+                <Stack.Screen name="ItemIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home'), this.searchHandler('')}}/>), title: 'Items'}}>
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
@@ -497,24 +513,36 @@ class App extends Component {
                   style={styles} /> }
                 </Stack.Screen>
                 
-                <Stack.Screen name="ContainerIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Containers'}}>
-                  {props => <IndexScreen {...props} containers={this.state.containers} style={styles}></IndexScreen>}
+                <Stack.Screen name="ContainerIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home'), this.searchHandler('')}}/>), title: 'Containers'}}>
+                  {props => <IndexScreen
+                  {...props}
+                  setSearchType={this.setSearchType}
+                  searchValue={this.state.searchValue}
+                  searchHandler={this.searchHandler}
+                  containers={this.filteredContainers()}
+                  style={styles}/>}
                 </Stack.Screen>
 
-                <Stack.Screen name="CategoryIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home')}}/>), title: 'Categories'}}>
-                  {props => <IndexScreen {...props} categories={this.state.categories} style={styles}></IndexScreen>}
+                <Stack.Screen name="CategoryIndex" options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={() => {navigate('Home'), this.searchHandler('') }}/>), title: 'Categories'}}>
+                  {props => <IndexScreen
+                  {...props}
+                  setSearchType={this.setSearchType}
+                  searchValue={this.state.searchValue}
+                  searchHandler={this.searchHandler}
+                  categories={this.filteredCategories()}
+                  style={styles}/>}
                 </Stack.Screen>
                 
                 <Stack.Screen name="ItemShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Item'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} removeHandler={this.removeHandler} inputType={'Item'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="ContainerShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Container'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} removeHandler={this.removeHandler} inputType={'Container'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="CategoryShow">
-                  {props => <ShowScreen {...props} searchHandler={this.searchHandler} removeHandler={this.removeHandler} inputType={'Category'} style={styles}></ShowScreen>}
+                  {props => <ShowScreen {...props} removeHandler={this.removeHandler} inputType={'Category'} style={styles}></ShowScreen>}
                 </Stack.Screen>
 
                 <Stack.Screen name="AddItem">
