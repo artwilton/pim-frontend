@@ -6,6 +6,7 @@ import {
   Keyboard,
   TouchableOpacity,
 } from 'react-native';
+import { RNCamera } from 'react-native-camera'
 
 class ScanScreen extends Component {
     render () {
