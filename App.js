@@ -479,8 +479,9 @@ class App extends Component {
         <Tab.Screen name="Home">
           {props => <HomeScreen {...props} items={this.state.items} style={styles} currentUserName={this.state.currentUserName} logoutHandler={this.logoutHandler}/>}
         </Tab.Screen>
-        <Tab.Screen name="Scan" component={ScanScreen} />
-        
+        <Tab.Screen name="Scan">
+          {props => <ScanScreen {...props} items={this.state.items} containers={this.state.containers} />}
+        </Tab.Screen>
         <Tab.Screen name="Add">
           {props => <AddScreenMain {...props} style={styles}/>}
         </Tab.Screen>
