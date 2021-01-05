@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
 } from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements'
 
 import Search from'../Components/Search'
 
@@ -24,14 +25,21 @@ function renderCards(props) {
     }
 
     return objToRender.map((obj) => (
-        <Text key={obj.id} onPress={() => props.navigation.navigate(route, {clickedObj: obj})}>{obj.name}</Text>
+        <ListItem key={obj.id} bottomDivider onPress={() => props.navigation.navigate(route, {clickedObj: obj})}>
+        <Avatar source={{uri: `http://10.0.2.2:3000${obj.photo.uri}`}} />
+        <ListItem.Content>
+          <ListItem.Title>{obj.name}</ListItem.Title>
+        </ListItem.Content>
+        <ListItem.Chevron />
+        </ListItem>
+        // <Text key={obj.id} onPress={() => props.navigation.navigate(route, {clickedObj: obj})}>{obj.name}</Text>
     ));
 }
 
 function IndexScreen(props) {
 
     return (
-        
+       
     <ScrollView>
         {(props.items || props.containers || props.categories) ? <Search setSearchType={props.setSearchType} searchType={'Name'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null }
         {/* {props.items ? <Search setSearchType={props.setSearchType} searchType={'Category'} searchValue={props.searchValue} searchHandler={props.searchHandler}/> : null } */}
