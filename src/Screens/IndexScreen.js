@@ -13,7 +13,7 @@ function renderCards(props) {
     let route = 'Home'
 
     if (props.items) {
-        objToRender = props.items,
+        objToRender = props.items(props.route.params ? props.route.params.clickedObj : null),
         route = 'ItemShow'
     } else if (props.containers) {
         objToRender = props.containers,

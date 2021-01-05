@@ -29,51 +29,62 @@ class ShowScreen extends React.Component {
     return (
       
       <ScrollView>
-          <View>
-                <Image
-                  style={this.props.style.fullSizePhoto}
-                  source={this.imageSourceCheck(clickedObj)}
-                />
-            <Text> Name: {clickedObj.name} </Text>
-            <Text> Description: {clickedObj.description} </Text>
-    
-            {this.props.inputType === 'Item' ? (
-                <>
-                <Text> Notes: {clickedObj.notes} </Text>
-                <Text> BarCode: {clickedObj.barcode} </Text>
-                <Text> Container: {clickedObj.container.name} </Text>
-                <Text> Category: {clickedObj.category.name} </Text>
-                </>
-            ) : null}
-    
-            {this.props.inputType === 'Container' ? (
-              <>
-                <Text> Notes: {clickedObj.notes} </Text>
-                <Text> Percent Used: {clickedObj.percent_used} </Text>
-                <Text> BarCode: {clickedObj.barcode} </Text>
-                <Text> Type: {clickedObj.type.name} </Text>
-              </>
-            ) : null}
-    
-          </View>
-          <View>
+        <View>
+          {this.props.inputType !== 'Item' ? 
             <TouchableOpacity
               style={this.props.style.button}
-              onPress={() => this.props.navigation.navigate(`${this.props.inputType}Edit`, {clickedObj: clickedObj})}
+              onPress={() => this.props.navigation.navigate(`${this.props.inputType}Items`, {clickedObj})}
             >
-              <Text>Edit {this.props.inputType}</Text>
+              <Text>Show Items In {this.props.inputType}</Text>
             </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={this.props.style.button}
-              onPress={
-                async () => { await this.props.removeHandler(clickedObj, this.props.inputType)}
-               }>
-              <Text>Delete {this.props.inputType}</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+            :
+            null
+            
+          }
+        <Image
+          style={this.props.style.fullSizePhoto}
+          source={this.imageSourceCheck(clickedObj)}
+        />
+        <Text> Name: {clickedObj.name} </Text>
+        <Text> Description: {clickedObj.description} </Text>
+
+        {this.props.inputType === 'Item' ? (
+            <>
+            <Text> Notes: {clickedObj.notes} </Text>
+            <Text> BarCode: {clickedObj.barcode} </Text>
+            <Text> Container: {clickedObj.container.name} </Text>
+            <Text> Category: {clickedObj.category.name} </Text>
+            </>
+        ) : null}
+
+        {this.props.inputType === 'Container' ? (
+          <>
+            <Text> Notes: {clickedObj.notes} </Text>
+            <Text> Percent Used: {clickedObj.percent_used} </Text>
+            <Text> BarCode: {clickedObj.barcode} </Text>
+            <Text> Type: {clickedObj.type.name} </Text>
+          </>
+        ) : null}
+  
+        </View>
+        <View>
+          <TouchableOpacity
+            style={this.props.style.button}
+            onPress={() => this.props.navigation.navigate(`${this.props.inputType}Edit`, {clickedObj: clickedObj})}
+          >
+            <Text>Edit {this.props.inputType}</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={this.props.style.button}
+            onPress={
+              async () => { await this.props.removeHandler(clickedObj, this.props.inputType)}
+              }>
+            <Text>Delete {this.props.inputType}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     );
   }
 

@@ -447,13 +447,15 @@ class App extends Component {
     this.setState({searchValue: searchText})
   }
 
-  filteredItems = () => {
-    return (
-      this.state.searchType === 'Name' ?
-      this.state.items.filter(item => item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
-      :
-      this.state.items.filter(item => item.category.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
-    )
+  filteredItems = (clickedObj = null) => {
+
+    if (clickedObj === null) {
+      return this.state.items.filter(item => item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase()))
+    } else if (clickedObj.percent_used) {
+      return this.state.items.filter(item => (item.container.name === clickedObj.name) && (item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase())))
+    } else {
+      return this.state.items.filter(item => (item.category.name === clickedObj.name) && (item.name.toLowerCase().includes(this.state.searchValue.toString().toLowerCase())))
+    }
   }
 
   filteredContainers = () => {
@@ -509,7 +511,7 @@ class App extends Component {
                   setSearchType={this.setSearchType}
                   searchValue={this.state.searchValue}
                   searchHandler={this.searchHandler}
-                  items={this.filteredItems()}
+                  items={this.filteredItems}
                   style={styles} /> }
                 </Stack.Screen>
                 
@@ -530,6 +532,26 @@ class App extends Component {
                   searchValue={this.state.searchValue}
                   searchHandler={this.searchHandler}
                   categories={this.filteredCategories()}
+                  style={styles}/>}
+                </Stack.Screen>
+
+                <Stack.Screen name="ContainerItems">
+                  {props => <IndexScreen
+                  {...props}
+                  setSearchType={this.setSearchType}
+                  searchValue={this.state.searchValue}
+                  searchHandler={this.searchHandler}
+                  items={this.filteredItems}
+                  style={styles}/>}
+                </Stack.Screen>
+
+                <Stack.Screen name="CategoryItems">
+                  {props => <IndexScreen
+                  {...props}
+                  setSearchType={this.setSearchType}
+                  searchValue={this.state.searchValue}
+                  searchHandler={this.searchHandler}
+                  items={this.filteredItems}
                   style={styles}/>}
                 </Stack.Screen>
                 
