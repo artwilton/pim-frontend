@@ -1,5 +1,6 @@
 import React, {Component, useEffect} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 class ShowScreen extends React.Component {
   
@@ -30,13 +31,11 @@ class ShowScreen extends React.Component {
       
       <ScrollView>
         <View>
-          {this.props.inputType !== 'Item' ? 
-            <TouchableOpacity
-              style={this.props.style.button}
-              onPress={() => this.props.navigation.navigate(`${this.props.inputType}Items`, {clickedObj})}
-            >
-              <Text>Show Items In {this.props.inputType}</Text>
-            </TouchableOpacity>
+          {this.props.inputType !== 'Item' ?
+            <SearchBar
+            onFocus={() => this.props.navigation.navigate(`${this.props.inputType}Items`, {clickedObj})}
+            placeholder={`Search For Items In ${this.props.inputType}`}
+            />
             :
             null
             

@@ -3,6 +3,7 @@ import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-naviga
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { navigationRef, navigate } from './RootNavigation';
+import { Icon } from 'react-native-elements'
 
 /**
  * Sample React Native App
@@ -478,13 +479,38 @@ class App extends Component {
   HomeTabs = () => {
     return (
       <Tab.Navigator>
-        <Tab.Screen name="Home">
+        <Tab.Screen
+          name="Home" 
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="home" type="entypo" color={color} size={size} />
+            ),
+          }}
+        >
           {props => <HomeScreen {...props} items={this.state.items} style={styles} currentUserName={this.state.currentUserName} logoutHandler={this.logoutHandler}/>}
         </Tab.Screen>
-        <Tab.Screen name="Scan">
+
+        <Tab.Screen
+          name="Scan" 
+          options={{
+            tabBarLabel: 'Scan',
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="barcode-scan" type="material-community" color={color} size={size} />
+            ),
+          }}
+        >
           {props => <ScanScreen {...props} items={this.state.items} containers={this.state.containers} />}
         </Tab.Screen>
-        <Tab.Screen name="Add">
+        <Tab.Screen
+          name="Add" 
+          options={{
+            tabBarLabel: 'Add',
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="add-circle" color={color} size={size} />
+            ),
+          }}
+        >
           {props => <AddScreenMain {...props} style={styles}/>}
         </Tab.Screen>
       </Tab.Navigator>

@@ -7,14 +7,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { styles } from  '../Styles'
+import { Button, ButtonGroup } from 'react-native-elements'
 
 class LoginSignupScreen extends Component {
   state = {
+    selectedIndex: 0,
     signup: false,
     name: '',
     email: '',
     password: ''
   };
+
+  updateIndex = (selectedIndex) => {
+    this.setState({selectedIndex})
+  }
 
   localAuthHandler = () => {
     this.props.loginAuthHandler(this.state.email);
@@ -29,18 +35,20 @@ class LoginSignupScreen extends Component {
   };
 
   render() {
+
+    const buttons = ['Login', 'Signup']
+    const { selectedIndex } = this.state
+
     return (
       <View>
-        <Text>Login/Signup Page</Text>
+        <ButtonGroup
+          onPress={this.updateIndex}
+          selectedIndex={selectedIndex}
+          buttons={buttons}
+          containerStyle={{height: 100}}
+        />
 
-        <TouchableOpacity style={styles.button} onPress={() => this.setState({signup: false})}>
-          <Text>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => this.setState({signup: true})}>
-          <Text>Signup</Text>
-        </TouchableOpacity>
-
-        {this.state.signup ?
+        {selectedIndex === 1 ?
             <TextInput
             onChangeText={(text) => this.loginSignupFormHandler(text, 'name')}
             placeholder={'Name'}
@@ -66,14 +74,12 @@ class LoginSignupScreen extends Component {
             // onEndEditing={Keyboard.dismiss}
         />
 
-        {this.state.signup ?
-          <TouchableOpacity onPress={this.localSignupHandler} style={styles.button}>
-            <Text>Signup</Text>
-          </TouchableOpacity>
+        {selectedIndex === 0 ?
+          <Button title={'Login'} onPress={this.localAuthHandler}>
+          </Button>
           :
-          <TouchableOpacity onPress={this.localAuthHandler} style={styles.button}>
-            <Text>Login</Text>
-          </TouchableOpacity>
+          <Button title={'Signup'} onPress={this.localSignupHandler}>
+          </Button>
 
         }
         
