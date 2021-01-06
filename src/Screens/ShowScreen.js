@@ -1,6 +1,6 @@
 import React, {Component, useEffect} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Button } from 'react-native-elements';
 
 class ShowScreen extends React.Component {
   

@@ -7,30 +7,27 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { RecentItems } from '../Components'
+import { Button } from 'react-native-elements';
 
 function HomeScreen({ currentUserName, navigation, style, items, logoutHandler }) {
     return (
-        <View>
+        <View style={style.container}>
                 <Text style={{fontSize: 20}}>
                     {`${currentUserName}'s Recent Items`}
                 </Text>
-                {items.length ? <RecentItems items={items}></RecentItems> : <Text style={{fontSize: 30}}>Loading Recent Items</Text>}
+                {items.length ? <RecentItems items={items} navigation={navigation}></RecentItems> : <Text style={{fontSize: 30}}>Loading Recent Items</Text>}
                 <View>
-                    <TouchableOpacity onPress={() => navigation.navigate('ItemIndex')} style={style.button}>
-                        <Text>Items</Text>
-                    </TouchableOpacity>
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('Shared')} style={style.button}>
+                    <Button containerStyle={{paddingVertical: 5}} title={'Items'} onPress={() => navigation.navigate('ItemIndex')} style={style.button}>
+                    </Button>
+                    {/* <Button onPress={() => navigation.navigate('Shared')} style={style.button}>
                         <Text>Shared</Text>
-                    </TouchableOpacity> */}
-                    <TouchableOpacity onPress={() => navigation.navigate('ContainerIndex')} style={style.button}>
-                        <Text>Containers</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('CategoryIndex')} style={style.button}>
-                        <Text>Categories</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => logoutHandler()} style={style.button}>
-                        <Text>Logout</Text>
-                    </TouchableOpacity>
+                    </Button> */}
+                    <Button containerStyle={{paddingVertical: 5}} title={'Containers'} onPress={() => navigation.navigate('ContainerIndex')}>
+                    </Button>
+                    <Button containerStyle={{paddingVertical: 5}} title={'Categories'} onPress={() => navigation.navigate('CategoryIndex')}>
+                    </Button>
+                    <Button containerStyle={{paddingVertical: 40}} title={'Logout'} onPress={() => logoutHandler()}>
+                    </Button>
                 </View>
             </View>
     )

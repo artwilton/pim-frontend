@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { styles } from  '../Styles'
-import { Button, ButtonGroup } from 'react-native-elements'
+import { Input, Button, ButtonGroup } from 'react-native-elements'
 
 class LoginSignupScreen extends Component {
   state = {
@@ -40,16 +40,20 @@ class LoginSignupScreen extends Component {
     const { selectedIndex } = this.state
 
     return (
-      <View>
+      <>
+      <View style={{padding: 10}}>
         <ButtonGroup
           onPress={this.updateIndex}
           selectedIndex={selectedIndex}
           buttons={buttons}
-          containerStyle={{height: 100}}
+          containerStyle={{height: 60}}
+          textStyle={{fontSize: 18}}
         />
+      </View>
+      <View style={styles.container}>
 
         {selectedIndex === 1 ?
-            <TextInput
+            <Input
             onChangeText={(text) => this.loginSignupFormHandler(text, 'name')}
             placeholder={'Name'}
             value={this.state.name}
@@ -59,14 +63,14 @@ class LoginSignupScreen extends Component {
             null
          }
         
-        <TextInput
+        <Input
             onChangeText={(text) => this.loginSignupFormHandler(text, 'email')}
             placeholder={'Email'}
             value={this.state.email}
             keyboardType={'email-address'}
             // onEndEditing={Keyboard.dismiss}
         />
-        <TextInput
+        <Input
             onChangeText={(text) => this.loginSignupFormHandler(text, 'password')}
             placeholder={'Password'}
             value={this.state.password}
@@ -84,6 +88,7 @@ class LoginSignupScreen extends Component {
         }
         
       </View>
+      </>
     );
   }
 }

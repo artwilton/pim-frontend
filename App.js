@@ -478,13 +478,14 @@ class App extends Component {
   // Nav Tab Screens
   HomeTabs = () => {
     return (
-      <Tab.Navigator>
+      <Tab.Navigator tabBarOptions={{style: { height: 60 }, labelStyle: {fontSize: 14}}}>
         <Tab.Screen
           name="Home" 
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="home" type="entypo" color={color} size={size} />
+            tabBarIcon: ({ color }) => (
+              console.log('color', color),
+              <Icon name="home" type="entypo" color={color} size={32} />
             ),
           }}
         >
@@ -495,8 +496,8 @@ class App extends Component {
           name="Scan" 
           options={{
             tabBarLabel: 'Scan',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="barcode-scan" type="material-community" color={color} size={size} />
+            tabBarIcon: ({ color }) => (
+              <Icon name="barcode-scan" type="material-community" color={color} size={32} />
             ),
           }}
         >
@@ -506,8 +507,8 @@ class App extends Component {
           name="Add" 
           options={{
             tabBarLabel: 'Add',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="add-circle" color={color} size={size} />
+            tabBarIcon: ({ color }) => (
+              <Icon name="add-circle" color={color} size={32} />
             ),
           }}
         >
