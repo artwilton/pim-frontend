@@ -1,6 +1,7 @@
 import React, {Component, useEffect} from 'react';
 import {Text, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 import { SearchBar, Button } from 'react-native-elements';
+import { styles } from '../Styles';
 
 class ShowScreen extends React.Component {
   
@@ -30,7 +31,6 @@ class ShowScreen extends React.Component {
     return (
       
       <ScrollView>
-        <View>
           {this.props.inputType !== 'Item' ?
             <SearchBar
             onFocus={() => this.props.navigation.navigate(`${this.props.inputType}Items`, {clickedObj})}
@@ -40,6 +40,7 @@ class ShowScreen extends React.Component {
             null
             
           }
+        <View style={styles.container}>
         <Image
           style={this.props.style.fullSizePhoto}
           source={this.imageSourceCheck(clickedObj)}
@@ -65,23 +66,10 @@ class ShowScreen extends React.Component {
           </>
         ) : null}
   
-        </View>
-        <View>
-          <TouchableOpacity
-            style={this.props.style.button}
-            onPress={() => this.props.navigation.navigate(`${this.props.inputType}Edit`, {clickedObj: clickedObj})}
-          >
-            <Text>Edit {this.props.inputType}</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={this.props.style.button}
-            onPress={
-              async () => { await this.props.removeHandler(clickedObj, this.props.inputType)}
-              }>
-            <Text>Delete {this.props.inputType}</Text>
-          </TouchableOpacity>
+        <Button containerStyle={{paddingVertical: 5}} title={`Edit ${this.props.inputType}`} onPress={() => this.props.navigation.navigate(`${this.props.inputType}Edit`, {clickedObj: clickedObj})}/>
+        <Button containerStyle={{paddingVertical: 5}} title={`Delete ${this.props.inputType}`} onPress={
+          async () => { await this.props.removeHandler(clickedObj, this.props.inputType)}
+        }/>
         </View>
       </ScrollView>
     );

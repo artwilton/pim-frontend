@@ -3,14 +3,15 @@ import React, {Component} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {
   Text,
-  TextInput,
   View,
   ScrollView,
   Keyboard,
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { Input, Button } from 'react-native-elements'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { styles } from '../../Styles';
 
 class EditItemScreen extends Component {
   state = {
@@ -125,63 +126,53 @@ class EditItemScreen extends Component {
   render() {
     return (
       <ScrollView>
-        <Image
-          style={this.props.style.fullSizePhoto}
-          source={this.imageSourceCheck()}
-        />
-        <TouchableOpacity
-          onPress={() => this.cameraTakePhoto()}
-          style={this.props.style.button}>
-          <Text>Take New Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.uploadPhoto()}
-          style={this.props.style.button}>
-          <Text>Upload Photo</Text>
-        </TouchableOpacity>
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'name')}
-          placeholder={'Item Name'}
-          value={this.state.name}
-        />
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'description')}
-          placeholder={'Item Description'}
-          value={this.state.description}
-        />
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'notes')}
-          placeholder={'Item Notes (optional)'}
-          value={this.state.notes}
-        />
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'barcode')}
-          placeholder={'Barcode (optional)'}
-          value={this.state.barcode}
-        />
-        <Text> Select Container: </Text>
-        <Picker
-          selectedValue={this.state.container}
-          style={{height: 50, width: 300}}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({container: itemValue})
-          }>
-          {this.renderContainerValues()}
-        </Picker>
-        <Text> Select Category: </Text>
-        <Picker
-          selectedValue={this.state.category}
-          style={{height: 50, width: 300}}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({category: itemValue})
-          }>
-          {this.renderCategoryValues()}
-        </Picker>
-        <TouchableOpacity
-        onPress={() => this.props.itemFormHandler(this.state, 'edit') }
-        style={this.props.style.button}>
-          <Text>Save Changes</Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              style={styles.fullSizePhoto}
+              source={this.imageSourceCheck()}
+            />
+          </View>
+          <Button containerStyle={{paddingVertical: 5}} title={'Take New Photo'} onPress={() => this.cameraTakePhoto()}/>
+          <Button containerStyle={{paddingVertical: 5}} title={'Upload Photo'} onPress={() => this.uploadPhoto()}/>
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'name')}
+            placeholder={'Item Name'}
+            value={this.state.name}
+          />
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'description')}
+            placeholder={'Description'}
+            value={this.state.description}
+          />
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'notes')}
+            placeholder={'Notes (optional)'}
+            value={this.state.notes}
+          />
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'barcode')}
+            placeholder={'Barcode (optional)'}
+            value={this.state.barcode}
+          />
+          <Text style={{fontSize: 15}}> Select Container: </Text>
+          <Picker
+            selectedValue={this.state.container}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({container: itemValue})
+            }>
+            {this.renderContainerValues()}
+          </Picker>
+          <Text style={{fontSize: 15}}> Select Category: </Text>
+          <Picker
+            selectedValue={this.state.category}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({category: itemValue})
+            }>
+            {this.renderCategoryValues()}
+          </Picker>
+          <Button containerStyle={{paddingVertical: 5}} title={'Save Changes'} onPress={() => this.props.itemFormHandler(this.state, 'edit') }/>
+        </View>
       </ScrollView>
     );
   }

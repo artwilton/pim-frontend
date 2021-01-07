@@ -21,6 +21,8 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   fullSizePhoto: {
+    alignItems: 'center',
+    alignContent: 'center',
     width: 300,
     height: 300,
   }

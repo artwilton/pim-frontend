@@ -44,13 +44,18 @@ class RecentItems extends React.Component {
           );
       }
 
+      reverseItemArray = () => {
+          return [...this.props.items].reverse()
+      }
+
     render () { 
+        this.reverseItemArray()
         return (
             <View>
                 <Carousel
                     layout={'stack'}
                     layoutCardOffset={20}
-                    data={this.props.items}
+                    data={this.reverseItemArray()}
                     renderItem={this._renderItem}
                     sliderWidth={400}
                     itemWidth={300}

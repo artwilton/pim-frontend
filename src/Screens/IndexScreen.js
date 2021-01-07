@@ -14,13 +14,16 @@ function renderCards(props) {
     let route = 'Home'
 
     if (props.items) {
-        objToRender = props.items(props.route.params ? props.route.params.clickedObj : null),
+        objToRender = props.items(props.route.params ? props.route.params.clickedObj : null)
+        objToRender.reverse()
         route = 'ItemShow'
     } else if (props.containers) {
-        objToRender = props.containers,
+        objToRender = props.containers
+        objToRender.reverse()
         route = 'ContainerShow'
     } else if (props.categories) {
-        objToRender = props.categories,
+        objToRender = props.categories
+        objToRender.reverse()
         route = 'CategoryShow'
     }
 
@@ -35,6 +38,7 @@ function renderCards(props) {
         // <Text key={obj.id} onPress={() => props.navigation.navigate(route, {clickedObj: obj})}>{obj.name}</Text>
     ));
 }
+
 
 function IndexScreen(props) {
 

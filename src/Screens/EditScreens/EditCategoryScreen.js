@@ -3,13 +3,13 @@ import React, {Component} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {
   Text,
-  TextInput,
   View,
   ScrollView,
   Keyboard,
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { Input, Button } from 'react-native-elements'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 class EditCategoryScreen extends Component {
@@ -100,35 +100,27 @@ class EditCategoryScreen extends Component {
   render() {
     return (
       <ScrollView>
-        <Image
-          style={this.props.style.fullSizePhoto}
-          source={this.imageSourceCheck()}
-        />
-        <TouchableOpacity
-          onPress={() => this.cameraTakePhoto()}
-          style={this.props.style.button}>
-          <Text>Take New Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.uploadPhoto()}
-          style={this.props.style.button}>
-          <Text>Upload Photo</Text>
-        </TouchableOpacity>
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'name')}
-          placeholder={'Category Name'}
-          value={this.state.name}
-        />
-        <TextInput
-          onChangeText={(text) => this.localFormHandler(text, 'description')}
-          placeholder={'Category Description'}
-          value={this.state.description}
-        />
-        <TouchableOpacity
-        onPress={() => this.props.categoryFormHandler(this.state, 'edit') }
-        style={this.props.style.button}>
-          <Text>Save Changes</Text>
-        </TouchableOpacity>
+        <View style={this.props.style.container}>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              style={this.props.style.fullSizePhoto}
+              source={this.imageSourceCheck()}
+            />
+          </View>
+          <Button containerStyle={{paddingVertical: 5}} title={'Take New Photo'} onPress={() => this.cameraTakePhoto()}/>
+          <Button containerStyle={{paddingVertical: 5}} title={'Upload Photo'} onPress={() => this.uploadPhoto()}/>
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'name')}
+            placeholder={'Category Name'}
+            value={this.state.name}
+          />
+          <Input
+            onChangeText={(text) => this.localFormHandler(text, 'description')}
+            placeholder={'Category Description'}
+            value={this.state.description}
+          />
+          <Button containerStyle={{paddingVertical: 5}} title={'Save Changes'} onPress={() => this.props.categoryFormHandler(this.state, 'edit') }/>
+        </View>
       </ScrollView>
     );
   }
