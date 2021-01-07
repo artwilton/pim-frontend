@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import { Text, TextInput, ScrollView, View, Image, TouchableOpacity } from 'react-native';
+import { Text, ScrollView, View, Image, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { Input, Button } from 'react-native-elements'
 
 class NewContainerForm extends Component {
   state = {
@@ -69,41 +70,36 @@ class NewContainerForm extends Component {
   render() {
     return (
       <ScrollView>
+        <View style={this.props.style.container}>
+        <View style={{alignItems: 'center'}}>
         <Image
           style={this.props.style.fullSizePhoto}
           source={this.imageSourceCheck()}
         />
-        <TouchableOpacity
-          onPress={() => this.cameraTakePhoto()}
-          style={this.props.style.button}>
-          <Text>Take Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.uploadPhoto()}
-          style={this.props.style.button}>
-          <Text>Upload Photo</Text>
-        </TouchableOpacity>
-        <TextInput
+        </View>
+        <Button containerStyle={{paddingVertical: 5}} title={'Take New Photo'} onPress={() => this.cameraTakePhoto()}/>
+        <Button containerStyle={{paddingVertical: 5}} title={'Upload Photo'} onPress={() => this.uploadPhoto()}/>
+        <Input
           onChangeText={(text) => this.localFormHandler(text, 'name')}
           placeholder={'Container Name'}
           value={this.state.name}
         />
-        <TextInput
+        <Input
           onChangeText={(text) => this.localFormHandler(text, 'description')}
           placeholder={'Description'}
           value={this.state.description}
         />
-        <TextInput
+        <Input
           onChangeText={(text) => this.localFormHandler(text, 'notes')}
           placeholder={'Notes (optional)'}
           value={this.state.notes}
         />
-        <TextInput
+        <Input
           onChangeText={(text) => this.localFormHandler(text, 'percent_used')}
           placeholder={'Percent Used'}
           value={this.state.percent_used}
         />
-        <TextInput
+        <Input
           onChangeText={(text) => this.localFormHandler(text, 'barcode')}
           placeholder={'Barcode (optional)'}
           value={this.state.barcode}
@@ -117,9 +113,8 @@ class NewContainerForm extends Component {
           }>
           {this.renderTypeValues()}
         </Picker>
-        <TouchableOpacity onPress={() => this.props.containerFormHandler(this.state, 'add')} style={this.props.style.button}>
-            <Text>Submit</Text>
-        </TouchableOpacity>
+        <Button containerStyle={{paddingVertical: 5}} title={'Submit'} onPress={() => this.props.containerFormHandler(this.state, 'add')}/>
+        </View>
       </ScrollView>
     );
   }

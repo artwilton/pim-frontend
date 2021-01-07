@@ -41,28 +41,68 @@ class ShowScreen extends React.Component {
             
           }
         <View style={styles.container}>
-        <Image
-          style={this.props.style.fullSizePhoto}
-          source={this.imageSourceCheck(clickedObj)}
-        />
-        <Text> Name: {clickedObj.name} </Text>
-        <Text> Description: {clickedObj.description} </Text>
+        <View style={{alignItems: 'center', paddingBottom: 10}}>
+          <Image
+            style={this.props.style.fullSizePhoto}
+            source={this.imageSourceCheck(clickedObj)}
+          />
+        </View>
+
+        <Text style={{fontSize: 18}}>
+          <Text style={{fontWeight: 'bold'}}>Name: </Text>
+          <Text>{clickedObj.name}</Text>
+        </Text>
+
+        <Text style={{fontSize: 18}}>
+          <Text style={{fontWeight: 'bold'}}>Description: </Text>
+          <Text>{clickedObj.description}</Text>
+        </Text>
 
         {this.props.inputType === 'Item' ? (
             <>
-            <Text> Notes: {clickedObj.notes} </Text>
-            <Text> BarCode: {clickedObj.barcode} </Text>
-            <Text> Container: {clickedObj.container.name} </Text>
-            <Text> Category: {clickedObj.category.name} </Text>
+              <Text style={{fontSize: 18}}>
+                <Text style={{fontWeight: 'bold'}}>Notes: </Text>
+                <Text>{clickedObj.notes}</Text>
+              </Text>
+
+              <Text style={{fontSize: 18}}>
+                <Text style={{fontWeight: 'bold'}}>BarCode: </Text>
+                <Text>{clickedObj.barcode}</Text>
+              </Text>
+
+              <Text style={{fontSize: 18}}>
+                <Text style={{fontWeight: 'bold'}}>Container: </Text>
+                <Text>{clickedObj.container.name}</Text>
+              </Text>
+
+              <Text style={{fontSize: 18}}>
+                <Text style={{fontWeight: 'bold'}}>Category: </Text>
+                <Text>{clickedObj.category.name}</Text>
+              </Text>
             </>
         ) : null}
 
         {this.props.inputType === 'Container' ? (
           <>
-            <Text> Notes: {clickedObj.notes} </Text>
-            <Text> Percent Used: {clickedObj.percent_used} </Text>
-            <Text> BarCode: {clickedObj.barcode} </Text>
-            <Text> Type: {clickedObj.type.name} </Text>
+            <Text style={{fontSize: 18}}>
+              <Text style={{fontWeight: 'bold'}}>Notes: </Text>
+              <Text>{clickedObj.notes}</Text>
+            </Text>
+
+            <Text style={{fontSize: 18}}>
+              <Text style={{fontWeight: 'bold'}}>Percent Used: </Text>
+              <Text>{clickedObj.percent_used}</Text>
+            </Text>
+
+            <Text style={{fontSize: 18}}>
+              <Text style={{fontWeight: 'bold'}}>BarCode: </Text>
+              <Text>{clickedObj.barcode}</Text>
+            </Text>
+
+            <Text style={{fontSize: 18}}>
+              <Text style={{fontWeight: 'bold'}}>Type: </Text>
+              <Text>{clickedObj.type.name}</Text>
+            </Text>
           </>
         ) : null}
   

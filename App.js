@@ -562,7 +562,7 @@ class App extends Component {
                   style={styles}/>}
                 </Stack.Screen>
 
-                <Stack.Screen name="ContainerItems">
+                <Stack.Screen name="ContainerItems" options={{title: 'Items'}}>
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
@@ -572,7 +572,7 @@ class App extends Component {
                   style={styles}/>}
                 </Stack.Screen>
 
-                <Stack.Screen name="CategoryItems">
+                <Stack.Screen name="CategoryItems" options={{title: 'Items'}}>
                   {props => <IndexScreen
                   {...props}
                   setSearchType={this.setSearchType}
