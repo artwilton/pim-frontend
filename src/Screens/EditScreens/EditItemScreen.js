@@ -50,8 +50,7 @@ class EditItemScreen extends Component {
         container,
         category,
         photo,
-      },
-      () => console.log('edit form mounted state', this.state),
+      }
     );
   }
 
