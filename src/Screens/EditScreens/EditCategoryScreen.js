@@ -12,6 +12,8 @@ import {
 import { Input, Button } from 'react-native-elements'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
+const defaultPhoto = '../../../src/assets/img/default_item_photo.png'
+
 class EditCategoryScreen extends Component {
   state = {
     id: '',
@@ -77,7 +79,7 @@ class EditCategoryScreen extends Component {
       uri: (this.state.photo.uri && this.state.photo.uri.startsWith('/')) ?
         this.state.photo.uri
       :
-        '../../../src/assets/img/default_item_photo.png'
+        defaultPhoto
     }
     this.setState({photo: response, originalPhoto: orignalPhotoObj});
   }
@@ -91,7 +93,7 @@ class EditCategoryScreen extends Component {
     } else if (this.state.photo.uri) {
       imageSource = {uri: `http://10.0.2.2:3000${this.state.photo.uri}`}
     } else {
-      imageSource = require('../../../src/assets/img/default_item_photo.png')
+      imageSource = require(defaultPhoto)
     }
     
     return imageSource
