@@ -4,6 +4,8 @@ import {Picker} from '@react-native-picker/picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { Input, Button } from 'react-native-elements'
 
+const defaultPhoto = '../../../src/assets/img/default_item_photo.png'
+
 class NewItemForm extends Component {
   state = {
     name: '',
@@ -68,7 +70,7 @@ class NewItemForm extends Component {
     this.state.photo.uri ?
     imageSource = {uri: this.state.photo.uri}
     :
-    imageSource = require('../../../src/assets/img/default_item_photo.png')
+    imageSource = require(defaultPhoto)
     
     return imageSource
   }
