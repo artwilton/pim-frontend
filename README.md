@@ -22,7 +22,7 @@ https://user-images.githubusercontent.com/69938486/123050076-4805de80-d3ce-11eb-
 - react-native-snap-carousel - https://github.com/meliorence/react-native-snap-carousel
 
 ### Backend
-- Rails API with PostgreSQL Database - 
+- Rails API with PostgreSQL Database
 - Active Storage for uploading and storing photos
 
 ---
