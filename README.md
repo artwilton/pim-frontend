@@ -4,7 +4,7 @@
 
 Here's a demo of PIM from the Flatiron School Science Fair:
 
-https://user-images.githubusercontent.com/69938486/123050076-4805de80-d3ce-11eb-8096-1c391b3d1b9d.mp4
+https://user-images.githubusercontent.com/69938486/216869521-a825c63f-5689-4353-badc-05454638e1a5.mp4
 
 ## Tech Stack
 
